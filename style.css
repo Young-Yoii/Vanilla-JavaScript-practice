@@ -1,0 +1,54 @@
+.container {
+  width: 1200px;
+  overflow: hidden;
+  position: relative;
+
+  display: flex;
+}
+.box_wrap {
+  display: flex;
+  position: relative;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+}
+.first_box,
+.second_box,
+.third_box,
+.forth_box,
+.fivth_box {
+  width: 1200px;
+  height: 400px;
+  box-sizing: border-box;
+}
+
+.first_box {
+  background-color: aqua;
+}
+.second_box {
+  background-color: black;
+}
+.third_box {
+  background-color: brown;
+}
+.forth_box {
+  background-color: yellow;
+}
+.fivth_box {
+  background-color: gray;
+}
+
+.button_wrap {
+  display: flex;
+  position: absolute;
+  top: calc(50% - 16px);
+  width: 100%;
+}
+.prev_btn {
+  position: absolute;
+  left: 10px;
+}
+.next_btn {
+  position: absolute;
+  right: 10px;
+}
