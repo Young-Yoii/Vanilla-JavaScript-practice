@@ -1,5 +1,3 @@
-import { banners } from './db';
-
 // dom요소
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
