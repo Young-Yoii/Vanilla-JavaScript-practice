@@ -1,0 +1,95 @@
+.container {
+  width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.topbtn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.time_view {
+  font-size: 8em;
+  text-align: center;
+  margin: 200px 0;
+}
+
+.bottombtn {
+  text-align: center;
+}
+.bottombtn > button {
+  border-radius: 50%;
+  background: none;
+  border: 1px solid #000;
+  width: 40px;
+  height: 40px;
+}
+.bottombtn > button:active {
+  background-color: aquamarine;
+}
+
+.modal {
+  width: 700px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.modal.show {
+  display: block;
+}
+.modal_wrap {
+  background: #fff;
+  opacity: 1;
+  width: 500px;
+  height: auto;
+  max-height: 400px;
+  overflow: auto;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  box-sizing: border-box;
+}
+.modal_inner .time_btn {
+  margin-bottom: 20px;
+  text-align: end;
+}
+.modal_inner .time_input {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}
+.modal_inner .time_input > span {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+.modal_inner .time_input > span > input {
+  width: 140px;
+}
+.modal_inner .time_tit {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.modal_inner .time_tit > input {
+  width: 100%;
+}
+.modal_inner .submit_btn {
+  margin-top: 30px;
+}
+.modal input {
+  background: #666565;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+}/*# sourceMappingURL=style.css.map */
