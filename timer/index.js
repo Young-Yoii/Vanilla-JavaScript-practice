@@ -8,19 +8,19 @@ const timeView = document.getElementById("timeView");
 const titView = document.getElementById("titView");
 const modal = document.getElementById("modal");
 
-window.onload = () => {
-    init();
-}
-// 윈도우 로드시 동적으로 텍스트 삽입
-function init() {
-    timeView.innerText = `00 : 00 : 00`;
-}
-
 let hour = `00`;
 let min = `00`;
 let sec = `00`;
 let timer;
 let toggle = true;
+
+window.onload = () => {
+    init();
+}
+// 윈도우 로드시 동적으로 텍스트 삽입
+function init() {
+    setTimer(hour, min, sec);
+}
 
 // 타이머 display 셋팅
 function setTimer(hour, min, sec){
@@ -38,7 +38,7 @@ function setMode(e) {
         main.classList.add("up");
         main.classList.remove("down");
     }
-}
+};
 
 countDownBtn.addEventListener("click", setMode);
 countUpBtn.addEventListener("click", setMode);
@@ -46,7 +46,7 @@ countUpBtn.addEventListener("click", setMode);
 // 카운터 셋팅
 function setCount() {
     modal.classList.add("show");
-    if(main.classList.contains("down")) {
+    if(main.classList.contains("down")){
         modal.innerHTML = `
         <button class="close_btn">x</button>
         <div class="modal_wrap">
@@ -80,8 +80,7 @@ function setCount() {
                 </div>
             </div>
         </div>
-    ` 
-    }else{
+    ` }else{
         modal.innerHTML = `
         <button class="close_btn">x</button>
         <div class="modal_wrap">
@@ -94,8 +93,7 @@ function setCount() {
                 <button class="submit_btn">완료</button>
             </div>
         </div>
-    ` 
-    }
+    ` }
 
     //동적으로 삽입한 el
     const $timeBtn = document.querySelectorAll('.time_btn > button');
@@ -107,11 +105,10 @@ function setCount() {
 
     $closeBtn.addEventListener("click", function(){
         modal.classList.remove("show");
-    })
+    });
     $submitBtn.addEventListener("click", function(){
         modal.classList.remove("show");
-
-    })
+    });
 
     //분 버튼 클릭시 인풋창 값 변경
     $timeBtn.forEach(btn => {
@@ -126,9 +123,9 @@ function setCount() {
                 $minInput.setAttribute('value', 3);
                 min = 3;
             }
-            setTimer(hour, min, sec)
-        })
-    })
+            setTimer(hour, min, sec);
+        });
+    });
 
     //시간값 변경시 시간 display 변경
     $timeInput.forEach(input => {
@@ -140,16 +137,15 @@ function setCount() {
             }else {
                 sec = (e.target.value).padStart(2, "0");
             }
-            setTimer(hour, min, sec)
-        })
-    })
+            setTimer(hour, min, sec);
+        });
+    });
 
     //제목값 변경시 제목 display 변경
     $titInput.addEventListener("input",function(e){
         titView.innerHTML = e.target.value;
-    })
-}
-
+    });
+};
 function countDown() {
     if (sec != 0) {
         sec--;
@@ -164,19 +160,22 @@ function countDown() {
                 min = 60;
             }
             else {
-                clearTimer(timer, "타이머 종료");
+                clearInterval(timer);
+                alert("시간 종료")
+                playBtn.innerHTML = '▶'
+                toggle = true;
             }
         }
     }
-}
+};
 function countUp() {
     ++sec;
     hour = Math.floor(sec / 3600);
     min = Math.floor((sec - hour * 3600) / 60);
     let updSecond = sec - (hour * 3600 + min * 60);
 
-    setTimer(hour, min, updSecond)
-}
+    setTimer(hour, min, updSecond);
+};
 
 // 시간 리셋
 function resetTimer() {
@@ -186,7 +185,7 @@ function resetTimer() {
     hour = `00`;
     min = `00`;
     sec = `00`;
-}
+};
 // 재생, 일시정지 버튼 토글
 function pause() {
     if(main.classList.contains("down")){
@@ -210,15 +209,15 @@ function pause() {
         }else {
             timer = setInterval(countUp, 1000);
         }
-        playBtn.innerHTML = '||'
+        playBtn.innerHTML = '||';
         toggle = false;
     }
-}
+};
 
 settingBtn.addEventListener("click", setCount);
 resetBtn.addEventListener('click', resetTimer);
 playBtn.addEventListener('click', pause);
 // 모달 배경 클릭시 모달 닫힘
 window.addEventListener('click', (e) => {
-    e.target === modal ? modal.classList.remove("show") : false
+    e.target === modal ? modal.classList.remove("show") : false;
 })
