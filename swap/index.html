@@ -12,12 +12,14 @@
         <input type="text" id="titleInput" class="title__input" value="제목" placeholder="제목을 입력해주세요">
         <button id="titleBtn" class="title__btn">저장</button>
         <div id="contents" class="contents">
-            <button id="shuffleBtn" class="shuffle_btn">순서 섞기</button>
-            <div id="studetsSeat" class="student_seat__wrap"></div>
+            <div id="btnWrap" class="btn_wrap">
+                <button id="shuffleBtn" class="shuffle_btn" name="shuffle">순서 섞기</button>
+                <button id="settingBtn" class="setting_btn" name="setting">세팅</button>
+            </div>
+            <div id="studetsSeat" class="student_seat__wrap rdo-line3"></div>
         </div>
         <div class="modal" id="modal">
-            <button class="close_btn">x</button>
-            <button id="stopBtn" class="stop_btn">멈추기</button>
+            
         </div>
     </div>
     <script src="./index.js" type="module"></script>

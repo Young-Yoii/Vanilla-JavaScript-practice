@@ -1,9 +1,25 @@
 .contents {position: relative;
-    .student_seat__wrap{display: grid;grid-template-columns: repeat(4, 1fr);gap: 10px;}
-    .student_seat {border: 1px solid #000;}
-    .shuffle_btn {display: none;}
+    .student_seat__wrap {
+        & > .student_seat {border: 1px solid #000;}
+        @for $i from 1 through 5  {
+            &.rdo-line#{$i} {display: grid;grid-template-columns: repeat($i * 2, 1fr);gap: 10px;
+                &.rdo-seat2 > .student_seat:nth-child(#{$i * 2n}) {margin-right: 0px;}
+            }
+        }
+        &.rdo-seat2 {gap: 10px 0;
+            &.rdo-line1 > .student_seat {margin-right: 0px;}
+            & > .student_seat:nth-child(2n) {margin-right: 10px;}
+        }
+    }
+    .btn_wrap {display: none;
+        &.show {display: flex;}
+    }
 }
 .modal {width: 100%;margin: 0 auto;background-color: rgba(0,0,0,0.7);height: 100%;position: absolute;top: 0;left: 0;display: none;
     &.show {display: block;}
     &_wrap {background: #fff;opacity: 1;width: 500px;height: auto;max-height: 400px;overflow: auto;margin: 0 auto;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 30px;box-sizing: border-box;}
+    .gender_setting {display: none;
+        &.show {display: block;}
+    }
+
 }
