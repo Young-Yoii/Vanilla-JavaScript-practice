@@ -1,13 +1,13 @@
 const main = document.getElementById("main");
 const contents = document.getElementById("contents");
 const titleInput = document.getElementById("titleInput");
+const titleText = document.getElementById("titleText");
 const titleBtn = document.getElementById("titleBtn");
 const btnWrap = document.getElementById("btnWrap");
 const shuffleBtn = document.getElementById("shuffleBtn");
 const settingBtn = document.getElementById("settingBtn");
 const studetsSeat = document.getElementById("studetsSeat");
 const modal = document.getElementById("modal");
-
 
 import axios from './node_modules/axios/dist/esm/axios.min.js';
 
@@ -21,8 +21,24 @@ const setContents = async() => {
 
     // 화면에 그리기
     const setView = (studentArr) => {
-        studentArr.forEach((student) => studetsSeat.insertAdjacentHTML('beforeend', `<div class="student_seat">${student.name}</div>`))
+        studentArr.forEach((student) => studetsSeat.insertAdjacentHTML('beforeend', `<div class="student_seat ${student.gender === "male" ? "male" : 'female'}">${student.name}</div>`))
     }
+
+    titleInput.addEventListener("input", (e) => {
+        if((e.target.value).length > 0) {
+            titleBtn.classList.add("show");
+        }
+    })
+    titleBtn.addEventListener("click", () => {
+        titleInput.classList.remove("show");
+        titleText.classList.add("show");
+        titleBtn.classList.remove("show");
+        titleText.innerHTML = titleInput.value;
+    })
+    titleText.addEventListener("click", () => {
+        titleInput.classList.add("show");
+        titleText.classList.remove("show");
+    })
     
     // 데이터 여부에따라 화면에 그리기
     studentArr.length === 0 
@@ -104,7 +120,7 @@ const setContents = async() => {
                     <h4>자리 바꾸기 설정</h4>
                     <div class="seat_setting">
                         <label>자리 대형</label>
-                        <input type="radio" id="rdo-seat1" name="rdo-seat" value="rdo-seat1" checked>
+                        <input type="radio" id="rdo-seat1" name="rdo-seat" value="rdo-seat1">
                         <label for="rdo-seat1">거리두기 대형</label>
                         <input type="radio" id="rdo-seat2" name="rdo-seat" value="rdo-seat2">
                         <label for="rdo-seat2">짝궁 대형</label>
@@ -115,7 +131,7 @@ const setContents = async() => {
                         <label for="rdo-line1">2명</label>
                         <input type="radio" id="rdo-line2" name="rdo-line" value="4">
                         <label for="rdo-line2">4명</label>
-                        <input type="radio" id="rdo-line3" name="rdo-line" value="6" checked>
+                        <input type="radio" id="rdo-line3" name="rdo-line" value="6">
                         <label for="rdo-line3">6명</label>
                         <input type="radio" id="rdo-line4" name="rdo-line" value="8">
                         <label for="rdo-line4">8명</label>
@@ -177,7 +193,6 @@ const setContents = async() => {
                     genderType = undefined;
                 }
                 modal.classList.remove("show");
-                document.querySelector('input[type=radio][name=rdo-seat]:checked').setAttribute('checked', true);
             });  
         }
         if($stopBtn){

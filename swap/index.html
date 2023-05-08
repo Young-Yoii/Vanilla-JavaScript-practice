@@ -9,8 +9,11 @@
 </head>
 <body>
     <div id="main">
-        <input type="text" id="titleInput" class="title__input" value="제목" placeholder="제목을 입력해주세요">
-        <button id="titleBtn" class="title__btn">저장</button>
+        <div class="title">
+            <input type="text" id="titleInput" class="title__input show" value="제목" placeholder="제목을 입력해주세요">
+            <p id="titleText" class="title__text"></p>
+            <button id="titleBtn" class="title__btn">저장</button>    
+        </div>
         <div id="contents" class="contents">
             <div id="btnWrap" class="btn_wrap">
                 <button id="shuffleBtn" class="shuffle_btn" name="shuffle">순서 섞기</button>

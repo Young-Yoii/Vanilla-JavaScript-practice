@@ -1,8 +1,24 @@
+.title {
+  display: flex;
+}
+.title .show {
+  display: block;
+}
+.title__text, .title__btn, .title__input {
+  display: none;
+}
+.title__text {
+  cursor: pointer;
+}
+
 .contents {
   position: relative;
 }
-.contents .student_seat__wrap > .student_seat {
-  border: 1px solid #000;
+.contents .student_seat__wrap > .student_seat.male {
+  border: 2px solid skyblue;
+}
+.contents .student_seat__wrap > .student_seat.female {
+  border: 2px solid pink;
 }
 .contents .student_seat__wrap.rdo-line1 {
   display: grid;

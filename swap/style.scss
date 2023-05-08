@@ -1,6 +1,14 @@
+.title {display: flex;
+    .show {display: block;}
+    &__text, &__btn, &__input {display: none;}
+    &__text {cursor: pointer;}
+}
 .contents {position: relative;
     .student_seat__wrap {
-        & > .student_seat {border: 1px solid #000;}
+        & > .student_seat {
+            &.male {border: 2px solid skyblue;}
+            &.female {border: 2px solid pink;}
+        }
         @for $i from 1 through 5  {
             &.rdo-line#{$i} {display: grid;grid-template-columns: repeat($i * 2, 1fr);gap: 10px;
                 &.rdo-seat2 > .student_seat:nth-child(#{$i * 2n}) {margin-right: 0px;}
