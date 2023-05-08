@@ -20,7 +20,7 @@
         }
     }
     .btn_wrap {display: none;
-        &.show {display: flex;}
+        &.show {display: flex;justify-content: space-between;}
     }
 }
 .modal {width: 100%;margin: 0 auto;background-color: rgba(0,0,0,0.7);height: 100%;position: absolute;top: 0;left: 0;display: none;

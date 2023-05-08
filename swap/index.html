@@ -10,8 +10,8 @@
 <body>
     <div id="main">
         <div class="title">
-            <input type="text" id="titleInput" class="title__input show" value="제목" placeholder="제목을 입력해주세요">
-            <p id="titleText" class="title__text"></p>
+            <input type="text" id="titleInput" class="title__input" placeholder="제목을 입력해주세요" autocomplete="off">
+            <p id="titleText" class="title__text show">자리바꾸기 제목</p>
             <button id="titleBtn" class="title__btn">저장</button>    
         </div>
         <div id="contents" class="contents">
@@ -19,11 +19,9 @@
                 <button id="shuffleBtn" class="shuffle_btn" name="shuffle">순서 섞기</button>
                 <button id="settingBtn" class="setting_btn" name="setting">세팅</button>
             </div>
-            <div id="studetsSeat" class="student_seat__wrap rdo-line3"></div>
+            <div id="studetsSeat" class="student_seat__wrap rdo-seat1 rdo-line3"></div>
         </div>
-        <div class="modal" id="modal">
-            
-        </div>
+        <div class="modal" id="modal"></div>
     </div>
     <script src="./index.js" type="module"></script>
 </body>

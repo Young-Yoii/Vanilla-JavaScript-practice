@@ -74,6 +74,7 @@
 }
 .contents .btn_wrap.show {
   display: flex;
+  justify-content: space-between;
 }
 
 .modal {
