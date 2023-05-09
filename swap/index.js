@@ -56,7 +56,15 @@ const setContents = async() => {
 
     // 화면에 그리기
     const setView = (studentArr) => {
+        // 자리바꾸기.ver
         studentArr.forEach((student) => studetsSeat.insertAdjacentHTML('beforeend', `<div class="student_seat ${student.gender === "male" ? "male" : 'female'}">${student.name}</div>`))
+        
+        // 순서정하기.ver
+        // let str = '';
+        // for(let i = 0; i < studentArr.length; i++){
+        //     str += `<div class="student_seat ${studentArr[i].gender === "male" ? "male" : 'female'}"><span>${i + 1}</span>${studentArr[i].name}</div>`
+        // }
+        // studetsSeat.innerHTML = str;
     }
     
     // 데이터 여부에따라 화면에 그리기
