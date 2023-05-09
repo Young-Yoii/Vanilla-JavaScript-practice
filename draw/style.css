@@ -1,0 +1,67 @@
+.title {
+  display: flex;
+}
+.title .show {
+  display: block;
+}
+.title__text, .title__btn, .title__input {
+  display: none;
+}
+.title__text {
+  cursor: pointer;
+}
+
+.contents {
+  position: relative;
+}
+.contents .student-list__wrap {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.contents .student {
+  border: 1px solid #000;
+}
+.contents .btn_wrap {
+  display: none;
+}
+.contents .btn_wrap.show {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal {
+  width: 100%;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.modal.show {
+  display: block;
+}
+.modal_wrap {
+  background: #fff;
+  opacity: 1;
+  width: 500px;
+  height: auto;
+  max-height: 400px;
+  overflow: auto;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  box-sizing: border-box;
+}
+.modal .pick-student {
+  display: flex;
+}
+.modal .pick-student__pick {
+  border: 1px solid #000;
+  background: #fff;
+}/*# sourceMappingURL=style.css.map */

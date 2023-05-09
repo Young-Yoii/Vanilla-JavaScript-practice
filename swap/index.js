@@ -16,7 +16,7 @@ let genderType = 'random';
 // 모달 화면 컨텐츠 배열
 const seatArr = [
     {name: 'rdo-seat', id: 'rdo-seat1', label: '거리두기 대형' },
-    {name: 'rdo-seat', id: 'rdo-seat2', label: '짝궁대형'}
+    {name: 'rdo-seat', id: 'rdo-seat2', label: '짝궁 대형'}
 ]
 const lineArr = [
     {name: 'rdo-line', id: 'rdo-line1', value: '2', label: '2명'},

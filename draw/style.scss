@@ -1,0 +1,19 @@
+.title {display: flex;
+    .show {display: block;}
+    &__text, &__btn, &__input {display: none;}
+    &__text {cursor: pointer;}
+}
+.contents {position: relative;
+    .student-list__wrap {display: grid;grid-template-columns: repeat(6, 1fr);gap: 10px;}
+    .student {border: 1px solid #000;}
+    .btn_wrap {display: none;
+        &.show {display: flex;justify-content: space-between;}
+    }
+}
+.modal {width: 100%;margin: 0 auto;background-color: rgba(0,0,0,0.7);height: 100%;position: absolute;top: 0;left: 0;display: none;
+    &.show {display: block;}
+    &_wrap {background: #fff;opacity: 1;width: 500px;height: auto;max-height: 400px;overflow: auto;margin: 0 auto;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 30px;box-sizing: border-box;}
+    .pick-student {display: flex;
+        &__pick{border: 1px solid #000;background: #fff;}
+    }
+}

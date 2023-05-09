@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>랜덥뽑기</title>
+</head>
+<body>
+    <div id="main">
+        <div class="title">
+            <input type="text" id="titleInput" class="title__input" placeholder="제목을 입력해주세요" autocomplete="off">
+            <p id="titleText" class="title__text show">랜덤뽑기 제목</p>
+            <button id="titleBtn" class="title__btn">저장</button>    
+        </div>
+        <div id="contents" class="contents">
+            <div id="btnWrap" class="btn_wrap">
+                <button id="shuffleBtn" class="shuffle_btn" name="shuffle">뽑기</button>
+            </div>
+            <div id="studetsList" class="student-list__wrap"></div>
+        </div>
+        <div class="modal" id="modal"></div>
+    </div>
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
