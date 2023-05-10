@@ -7,13 +7,16 @@ p {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(4, 1fr);
+  background: lightcoral;
+  padding: 20px;
 }
 #main .draggable {
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  border: 1px solid #666;
+  background-color: #fff;
   padding: 10px;
   border-radius: 15px;
+  cursor: pointer;
 }
-#main .draggable.dragging {
-  opacity: 0.6;
+#main .draggable.invisible {
+  visibility: hidden;
 }/*# sourceMappingURL=style.css.map */

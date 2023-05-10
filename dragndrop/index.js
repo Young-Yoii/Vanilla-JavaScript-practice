@@ -20,6 +20,7 @@ const setContents = async() => {
         // div 안의 요소가 잡히는 것 방지
         e.target.classList.contains("draggable") ? currentItem = e.target : currentItem = e.target.parentElement;
         currentItem.classList.add("dragging");
+        setTimeout(() => currentItem.classList.add("invisible"), 0)
     });
     main.addEventListener("dragover", e => {
         e.preventDefault();
@@ -39,8 +40,15 @@ const setContents = async() => {
     })
     main.addEventListener("drop", e => {
         e.preventDefault();
+        
+        // const draggable = document.querySelector(".dragging");
+        // draggable.classList.remove("dragging");
+        // draggable.classList.remove("invisible");
+    })
+    main.addEventListener("dragend", e => {
         const draggable = document.querySelector(".dragging");
         draggable.classList.remove("dragging");
+        draggable.classList.remove("invisible");
     })
 }
 setContents();

@@ -1,6 +1,7 @@
 p{margin: 0; padding:0;}
-#main {display: grid;gap: 10px;grid-template-columns: repeat(4, 1fr);
-    .draggable {background: rgba(0,0,0,0.5);color: #fff;padding: 10px;border-radius: 15px;
-        &.dragging {opacity: .6;}
+#main {display: grid;gap: 10px;grid-template-columns: repeat(4, 1fr);background: lightcoral;padding:20px;
+    .draggable {border: 1px solid #666;background-color: #fff;padding: 10px;border-radius: 15px;cursor: pointer;
+        &.dragging {}
+        &.invisible{visibility: hidden;}
     }
 }
