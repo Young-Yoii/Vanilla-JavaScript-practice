@@ -16,7 +16,7 @@ const setContents = async() => {
     main.innerHTML = str;
 
     let currentItem;
-    main.addEventListener("dragstart", (e) => {
+    main.addEventListener("dragstart", e => {
         // div 안의 요소가 잡히는 것 방지
         e.target.classList.contains("draggable") ? currentItem = e.target : currentItem = e.target.parentElement;
         currentItem.classList.add("dragging");
@@ -34,21 +34,17 @@ const setContents = async() => {
 
         const dropItemIndex = listArr.indexOf(currentDropItem);
 
-        //main 부분이 잡혔을때 방지 --> 개선필요
+        //main 부분이 잡혔을때 방지 
         if(dropItemIndex === -1) return;
         curItemLeft >= curDropItemLeft && curItemTop >= curDropItemTop ? currentDropItem.before(currentItem) : currentDropItem.after(currentItem);
     })
-    main.addEventListener("drop", e => {
-        e.preventDefault();
-        
-        // const draggable = document.querySelector(".dragging");
-        // draggable.classList.remove("dragging");
-        // draggable.classList.remove("invisible");
-    })
-    main.addEventListener("dragend", e => {
+    main.addEventListener("dragend", () => {
         const draggable = document.querySelector(".dragging");
         draggable.classList.remove("dragging");
         draggable.classList.remove("invisible");
+    })
+    main.addEventListener("drop", e => {
+        e.preventDefault();
     })
 }
 setContents();

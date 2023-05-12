@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>todo-list</title>
+</head>
+<body>
+    <div id="main" class="main">
+        <button id="setBtn" type="button">추가하기</button>
+        <div class="container">
+            <div class="todo-wrap">
+                <h2>할일 목록</h2>
+                <ul id="todoList" class="todo-list"></ul>
+            </div>
+            <div class="todo-wrap">
+                <div>
+                    <h2>미완료된 할일</h2>
+                    <ul id="undoList" class="undo-list"></ul>
+                </div>
+                <div>
+                    <h2>다가오는 할일</h2>
+                    <ul id="havetodoList" class="havetodo-list"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="modal">
+            <div class="modal__wrap">
+                <h2>할 일 등록</h2>
+                <div>
+                    <label for="todoTit">제목</label>
+                    <input type="text" id="todoTit">
+                </div>
+                <div>
+                    <label for="todoCont">세부 내용</label>
+                    <input type="text" id="todoCont">
+                </div>
+                <div>
+                    <label for="todoStartDate">날짜선택</label>
+                    <input type="date" id="todoStartDate" data-placeholder="시작일 설정" aria-required="true" class="date">
+                    <span> ~ </span>
+                    <input type="date" id="todoEndDate" data-placeholder="종료일 설정" aria-required="true" class="date">
+                </div>
+                <div>
+                    <label for="todoStartDate">중요도</label>
+                    <div id="ratingBox" class="rating">
+                        <span class="star" data-index="0">★</span>
+                        <span class="star" data-index="1">★</span>
+                        <span class="star" data-index="2">★</span>
+                        <span class="star" data-index="3">★</span>
+                        <span class="star" data-index="4">★</span>
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn">추가하기</button>
+            </div>
+        </div>
+    </div>
+    <script src="./index.js" type="module"></script>
+</body>
+</html>

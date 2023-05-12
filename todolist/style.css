@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.main {
+  width: 900px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+.container > div {
+  width: 45%;
+}
+.container .todo-wrap {
+  border: 1px solid #000;
+}
+.container .todo-wrap h2 {
+  display: inline-block;
+  position: relative;
+}
+.container .todo-wrap h2::after {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 10px;
+  background-color: aquamarine;
+  opacity: 0.4;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+}
+.container .todo-wrap .todo-list, .container .todo-wrap .undo-list, .container .todo-wrap .havetodo-list {
+  padding: 15px;
+}
+.container .todo-wrap .todo-list > li, .container .todo-wrap .undo-list > li, .container .todo-wrap .havetodo-list > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #eee;
+  margin: 10px 0;
+  padding: 10px 0;
+}
+.container .todo-wrap .tit-input, .container .todo-wrap .cont-input {
+  display: none;
+}
+.container .todo-wrap .btn {
+  padding-bottom: 5px;
+  text-align: end;
+}
+.container .todo-wrap .btn > button {
+  background: none;
+  border: none;
+}
+.container .todo-wrap .date {
+  border-radius: 20px;
+  background-color: aquamarine;
+  padding: 8px;
+}
+.container .todo-wrap .rating-view .clicked {
+  color: red;
+}
+
+.modal {
+  width: 100%;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.modal input[type=date] {
+  width: 200px;
+}
+.modal .date::before {
+  content: attr(data-placeholder);
+  width: 100%;
+}
+.modal.show {
+  display: block;
+}
+.modal__wrap {
+  background: #fff;
+  opacity: 1;
+  width: 500px;
+  height: auto;
+  max-height: 400px;
+  overflow: auto;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  box-sizing: border-box;
+}
+.modal .rating span {
+  cursor: pointer;
+}
+.modal .rating .clicked {
+  color: red;
+}/*# sourceMappingURL=style.css.map */
