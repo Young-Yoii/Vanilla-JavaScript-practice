@@ -9,25 +9,31 @@
 </head>
 <body>
     <div id="main" class="main">
-        <button id="setBtn" type="button">추가하기</button>
+        <div class="main__btn">
+            <button id="setBtn" type="button">추가하기</button>
+            <button id="showCompleteTodoBtn" type="button">완료된 할일 보기</button>
+        </div>
         <div class="container">
-            <div class="todo-wrap">
-                <h2>할일 목록</h2>
-                <ul id="todoList" class="todo-list"></ul>
+            <div class="todo">
+                <h2 class="todo__tit">할일 목록</h2>
+                <p class="todo__default today">할 일이 없어요. 할 일을 추가 해 주세요.😊</p>
+                <ul id="todoList" class="todo__list"></ul>
             </div>
-            <div class="todo-wrap">
+            <div class="todo">
                 <div>
-                    <h2>미완료된 할일</h2>
-                    <ul id="undoList" class="undo-list"></ul>
+                    <h2 class="todo__tit">미완료된 할일</h2>
+                    <p class="todo__default undo">미완료된 할 일이 없어요.😊</p>
+                    <ul id="undoList" class="todo__list"></ul>
                 </div>
                 <div>
-                    <h2>다가오는 할일</h2>
-                    <ul id="havetodoList" class="havetodo-list"></ul>
+                    <h2 class="todo__tit">다가오는 할일</h2>
+                    <p class="todo__default havetodo">다가오는 할 일이 없어요.😊</p>
+                    <ul id="havetodoList" class="todo__list"></ul>
                 </div>
             </div>
         </div>
         <div class="modal" id="modal">
-            <div class="modal__wrap">
+            <div class="modal__wrap" id="modalWrap">
                 <h2>할 일 등록</h2>
                 <div>
                     <label for="todoTit">제목</label>
@@ -45,7 +51,7 @@
                 </div>
                 <div>
                     <label for="todoStartDate">중요도</label>
-                    <div id="ratingBox" class="rating">
+                    <div id="ratingBox" class="modal__rating">
                         <span class="star" data-index="0">★</span>
                         <span class="star" data-index="1">★</span>
                         <span class="star" data-index="2">★</span>

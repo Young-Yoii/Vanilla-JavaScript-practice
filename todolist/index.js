@@ -10,7 +10,9 @@ const todoStartDate = document.getElementById("todoStartDate");
 const todoEndDate = document.getElementById("todoEndDate");
 const setBtn = document.getElementById("setBtn");
 const modal = document.getElementById("modal");
+const modalWrap = document.getElementById("modalWrap");
 const stars = document.querySelectorAll('.star')
+const showCompleteTodoBtn = document.getElementById('showCompleteTodoBtn')
 
 const date = new Date().toISOString().slice(0, 10);
 let setClick = [true, true, true, false, false];
@@ -46,6 +48,7 @@ const handle = e => {
 
 stars.forEach((i) => i.addEventListener('click',handle));
 
+
 const app = async() => {
     let arr = [];
     const data = await axios.get('http://localhost:3000/todolist');
@@ -53,12 +56,12 @@ const app = async() => {
    
     arr.forEach(item => {
         let content = `
-            <div class="tit">
+            <div>
                 <h4>${item.title}</h4>
                 ${item.cont && `<p>${item.cont}</p>`}
             </div>
             <div>
-                <div class="btn">
+                <div class="todo__btn">
                     <button id="${item.id}" type="button" class="delete-btn">✖️</button>
                     <input type="checkbox" id="${item.id}" class="complete-btn" name="complete">
                     <button id="${item.id}" type="button" class="update-btn">✏️</button>
@@ -66,38 +69,66 @@ const app = async() => {
             `
         let rating = '';
         showRating(item.rating).forEach((i, index)=> rating += `<span class=${i && 'clicked'} data-index=${index}>★</span>`);
-        item.isComplete === false && item.start === date &&
+        if(item.isComplete === false && item.start === date) {
+        document.querySelector('.todo__default.today').classList.add('none');
         todoList.insertAdjacentHTML('beforeend', `
             <li>
                 ${content}
-                <div class="date">~ ${item.end}<span class="start-none">${item.start}</span><span class="end-none">${item.end}</span></div>
-                ${item.rating && `<div id="ratingView" class="rating-view" value=${item.rating}>${rating}</div>`}
+                <div class="todo__date">~ ${item.end}<span class="todo__date--start-none">${item.start}</span><span class="todo__date--end-none">${item.end}</span></div>
+                ${item.rating && `<div id="ratingView" class="todo__rating" value=${item.rating}>${rating}</div>`}
                 </div>
             </li>
-        `);
-        item.isComplete === false && item.end < date &&
+        `);}
+        if(item.isComplete === false && item.end < date) {
+        document.querySelector('.todo__default.undo').classList.add('none');
         undoList.insertAdjacentHTML('beforeend', `
             <li>
                 ${content}
-                <div class="date">~ ${item.end}
-                    <span class="start-none">${item.start}</span><span class="end-none">${item.end}</span>
+                <div class="todo__date">~ ${item.end}
+                    <span class="todo__date--start-none">${item.start}</span>
+                    <span class="todo__date--end-none">${item.end}</span>
                 </div>
-                <div id="ratingView" class="rating-view none" value=${item.rating}>${rating}</div>
+                <div id="ratingView" class="todo__rating--none" value=${item.rating}>${rating}</div>
                 </div>
             </li>
-        `);
-        item.isComplete === false && item.start > date &&
+        `);}
+        if(item.isComplete === false && item.start > date){
+            document.querySelector('.todo__default.havetodo').classList.add('none');
         havetodoList.insertAdjacentHTML('beforeend', `
             <li>
                 ${content}
-                <div class="date">${item.start} ~
-                    <span class="start-none">${item.start}</span><span class="end-none">${item.end}</span>
+                <div class="todo__date">${item.start} ~
+                    <span class="todo__date--start-none">${item.start}</span>
+                    <span class="todo__date--end-none">${item.end}</span>
                 </div>
-                <div id="ratingView" class="rating-view none" value=${item.rating}>${rating}</div>
+                <div id="ratingView" class="todo__rating--none" value=${item.rating}>${rating}</div>
                 </div>
             </li>
-        `)
+        `)}
     });
+
+    showCompleteTodoBtn.addEventListener("click", () => {
+        modalWrap.textContent = '';
+        arr.forEach(item => item.isComplete && modalWrap.insertAdjacentHTML('beforeend', `
+            <div class="complete-todo">
+                <h4>${item.title}</h4>
+                <p>${item.start} ~ ${item.end}</p>
+                <button id="${item.id}" type="button" class="delete-btn">✖️</button>
+            </div>
+        `))
+        modal.classList.add("show");
+
+        document.querySelectorAll(".delete-btn").forEach(item => item.addEventListener("click", async(e) => {
+            e.preventDefault();
+            const target = parseInt(e.target.id);
+            axios.delete(`http://localhost:3000/todolist/${target}`, {
+                data: {
+                  id: target,
+                  },
+               })
+        }));
+    })
+
     const $deleteBtn = document.querySelectorAll(".delete-btn");
     const $completeBtn = document.querySelectorAll(".complete-btn");
     const $updateBtn = document.querySelectorAll(".update-btn");
@@ -123,14 +154,15 @@ const app = async() => {
         // 모달창 값 넣어주기(조금 더 효율적인 방법 고안해보기)
         todoTit.value = targetClosest.querySelector('h4').textContent;
         targetClosest.querySelector('p') ? todoCont.value = targetClosest.querySelector('p').textContent : todoCont.value="";
-        todoStartDate.dataset.placeholder = targetClosest.querySelector('.start-none').textContent;
-        todoEndDate.dataset.placeholder = targetClosest.querySelector('.end-none').textContent;
-        const rating = targetClosest.querySelector('.rating-view').getAttribute('value');
+        todoStartDate.dataset.placeholder = targetClosest.querySelector('.todo__date--start-none').textContent;
+        todoEndDate.dataset.placeholder = targetClosest.querySelector('.todo__date--end-none').textContent;
+        const rating = targetClosest.querySelector('#ratingView').getAttribute('value');
         showRating(rating);
         setView(setClick);
 
         modal.classList.add("show");
     }));
+    
 };
 
 const postData = async(e) => {

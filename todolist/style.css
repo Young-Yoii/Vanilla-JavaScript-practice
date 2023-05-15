@@ -9,23 +9,29 @@ li {
 
 .main {
   width: 900px;
+  margin: 0 auto;
+}
+.main__btn {
+  display: flex;
+  justify-content: space-between;
 }
 
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 .container > div {
   width: 45%;
 }
-.container .todo-wrap {
+.container .todo {
   border: 1px solid #000;
 }
-.container .todo-wrap h2 {
+.container .todo__tit {
   display: inline-block;
   position: relative;
 }
-.container .todo-wrap h2::after {
+.container .todo__tit::after {
   display: block;
   content: "";
   width: 100%;
@@ -36,40 +42,42 @@ li {
   bottom: 0;
   z-index: -1;
 }
-.container .todo-wrap .todo-list, .container .todo-wrap .undo-list, .container .todo-wrap .havetodo-list {
+.container .todo__default {
+  padding: 20px;
+}
+.container .todo__default.none {
+  display: none;
+}
+.container .todo__list {
   padding: 15px;
 }
-.container .todo-wrap .todo-list > li, .container .todo-wrap .undo-list > li, .container .todo-wrap .havetodo-list > li {
+.container .todo__list > li {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   border-bottom: 1px solid #eee;
-  margin: 10px 0;
-  padding: 10px 0;
+  padding: 20px 0;
 }
-.container .todo-wrap .tit-input, .container .todo-wrap .cont-input {
-  display: none;
-}
-.container .todo-wrap .btn {
+.container .todo__btn {
   padding-bottom: 5px;
   text-align: end;
 }
-.container .todo-wrap .btn > button {
+.container .todo__btn > button {
   background: none;
   border: none;
 }
-.container .todo-wrap .date {
+.container .todo__date {
   border-radius: 20px;
   background-color: aquamarine;
   padding: 8px;
 }
-.container .todo-wrap .date .start-none, .container .todo-wrap .date .end-none {
+.container .todo__date--start-none, .container .todo__date--end-none {
   display: none;
 }
-.container .todo-wrap .rating-view .clicked {
+.container .todo__rating .clicked {
   color: red;
 }
-.container .todo-wrap .rating-view.none {
+.container .todo__rating--none {
   display: none;
 }
 
@@ -83,15 +91,15 @@ li {
   left: 0;
   display: none;
 }
+.modal.show {
+  display: block;
+}
 .modal input[type=date] {
   width: 150px;
 }
 .modal input[type=date]::before {
   content: attr(data-placeholder);
   width: 100%;
-}
-.modal.show {
-  display: block;
 }
 .modal__wrap {
   background: #fff;
@@ -108,9 +116,13 @@ li {
   padding: 30px;
   box-sizing: border-box;
 }
-.modal .rating span {
+.modal__rating span {
   cursor: pointer;
 }
-.modal .rating .clicked {
+.modal__rating .clicked {
   color: red;
+}
+.modal .complete-todo {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }/*# sourceMappingURL=style.css.map */
