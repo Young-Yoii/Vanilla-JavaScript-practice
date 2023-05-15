@@ -14,16 +14,19 @@ li {list-style: none;}
         .btn {padding-bottom: 5px;text-align: end;
             & > button {background: none;border: none;}
         }
-        .date {border-radius: 20px;background-color: aquamarine;padding: 8px;}
+        .date {border-radius: 20px;background-color: aquamarine;padding: 8px;
+            .start-none, .end-none {display: none;}
+        }
         .rating-view {
             .clicked {color: red;}
+            &.none {display: none;}
         }
    
     }
 }
 .modal {width: 100%;margin: 0 auto;background-color: rgba(0,0,0,0.7);height: 100%;position: absolute;top: 0;left: 0;display: none;
-    input[type='date'] {width: 200px;}
-    .date::before {content: attr(data-placeholder);width: 100%;}
+    input[type='date'] {width: 150px;}
+    input[type='date']::before {content: attr(data-placeholder);width: 100%;}
     &.show {display: block;}
     &__wrap {background: #fff;opacity: 1;width: 500px;height: auto;max-height: 400px;overflow: auto;margin: 0 auto;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 30px;box-sizing: border-box;}
     .rating {

@@ -63,8 +63,14 @@ li {
   background-color: aquamarine;
   padding: 8px;
 }
+.container .todo-wrap .date .start-none, .container .todo-wrap .date .end-none {
+  display: none;
+}
 .container .todo-wrap .rating-view .clicked {
   color: red;
+}
+.container .todo-wrap .rating-view.none {
+  display: none;
 }
 
 .modal {
@@ -78,9 +84,9 @@ li {
   display: none;
 }
 .modal input[type=date] {
-  width: 200px;
+  width: 150px;
 }
-.modal .date::before {
+.modal input[type=date]::before {
   content: attr(data-placeholder);
   width: 100%;
 }
