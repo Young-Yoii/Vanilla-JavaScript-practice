@@ -38,7 +38,7 @@ const showRating = (rating) => {
     let clickStates = [...setClick];
     return setClick = clickStates.map((i, idx) => clickStates[idx] = idx <= rating-1 ? true : false);
 };
-const handle = e => {
+const handleRating = e => {
     const target = e.target;
     let clickStates = [...setClick];
     setClick = clickStates.map((i, idx) => clickStates[idx] = idx <= parseInt(target.dataset.index) ? true : false);
@@ -46,8 +46,14 @@ const handle = e => {
     setView(setClick);
 };
 
-stars.forEach((i) => i.addEventListener('click',handle));
+stars.forEach((i) => i.addEventListener('click',handleRating));
 
+const deleteData = (e) => {
+    const target = parseInt(e.target.id);
+    axios.delete(`http://localhost:3000/todolist/${target}`, {
+        data: {id: target,},
+    })
+};
 
 const app = async() => {
     let arr = [];
@@ -70,41 +76,47 @@ const app = async() => {
         let rating = '';
         showRating(item.rating).forEach((i, index)=> rating += `<span class=${i && 'clicked'} data-index=${index}>★</span>`);
         if(item.isComplete === false && item.start === date) {
-        document.querySelector('.todo__default.today').classList.add('none');
-        todoList.insertAdjacentHTML('beforeend', `
-            <li>
-                ${content}
-                <div class="todo__date">~ ${item.end}<span class="todo__date--start-none">${item.start}</span><span class="todo__date--end-none">${item.end}</span></div>
-                ${item.rating && `<div id="ratingView" class="todo__rating" value=${item.rating}>${rating}</div>`}
-                </div>
-            </li>
-        `);}
+            document.querySelector('.todo__default.today').classList.add('hide');
+            todoList.insertAdjacentHTML('beforeend', `
+                <li>
+                    ${content}
+                    <div class="todo__date">~ ${item.end}
+                        <span class="todo__date--start-hide">${item.start}</span>
+                        <span class="todo__date--end-hide">${item.end}</span>
+                    </div>
+                    ${item.rating && `<div id="ratingView" class="todo__rating" value=${item.rating}>${rating}</div>`}
+                    </div>
+                </li>
+            `);
+        }
         if(item.isComplete === false && item.end < date) {
-        document.querySelector('.todo__default.undo').classList.add('none');
-        undoList.insertAdjacentHTML('beforeend', `
-            <li>
-                ${content}
-                <div class="todo__date">~ ${item.end}
-                    <span class="todo__date--start-none">${item.start}</span>
-                    <span class="todo__date--end-none">${item.end}</span>
-                </div>
-                <div id="ratingView" class="todo__rating--none" value=${item.rating}>${rating}</div>
-                </div>
-            </li>
-        `);}
+            document.querySelector('.todo__default.undo').classList.add('hide');
+            undoList.insertAdjacentHTML('beforeend', `
+                <li>
+                    ${content}
+                    <div class="todo__date">~ ${item.end}
+                        <span class="todo__date--start-hide">${item.start}</span>
+                        <span class="todo__date--end-hide">${item.end}</span>
+                    </div>
+                    <div id="ratingView" class="todo__rating--hide" value=${item.rating}>${rating}</div>
+                    </div>
+                </li>
+            `);
+        }
         if(item.isComplete === false && item.start > date){
             document.querySelector('.todo__default.havetodo').classList.add('none');
-        havetodoList.insertAdjacentHTML('beforeend', `
-            <li>
-                ${content}
-                <div class="todo__date">${item.start} ~
-                    <span class="todo__date--start-none">${item.start}</span>
-                    <span class="todo__date--end-none">${item.end}</span>
-                </div>
-                <div id="ratingView" class="todo__rating--none" value=${item.rating}>${rating}</div>
-                </div>
-            </li>
-        `)}
+            havetodoList.insertAdjacentHTML('beforeend', `
+                <li>
+                    ${content}
+                    <div class="todo__date">${item.start} ~
+                        <span class="todo__date--start-hide">${item.start}</span>
+                        <span class="todo__date--end-hide">${item.end}</span>
+                    </div>
+                    <div id="ratingView" class="todo__rating--hide" value=${item.rating}>${rating}</div>
+                    </div>
+                </li>
+            `)
+        }
     });
 
     showCompleteTodoBtn.addEventListener("click", () => {
@@ -120,12 +132,7 @@ const app = async() => {
 
         document.querySelectorAll(".delete-btn").forEach(item => item.addEventListener("click", async(e) => {
             e.preventDefault();
-            const target = parseInt(e.target.id);
-            axios.delete(`http://localhost:3000/todolist/${target}`, {
-                data: {
-                  id: target,
-                  },
-               })
+            deleteData(e);
         }));
     })
 
@@ -134,14 +141,11 @@ const app = async() => {
     const $updateBtn = document.querySelectorAll(".update-btn");
     
     $deleteBtn.forEach(item => item.addEventListener("click", async(e) => {
-        const target = parseInt(e.target.id);
-        axios.delete(`http://localhost:3000/todolist/${target}`, {
-            data: {
-              id: target,
-              },
-           })
+        e.preventDefault();
+        deleteData(e);
     }));
     $completeBtn.forEach(item => item.addEventListener("click", async(e) => {
+        e.preventDefault();
         const target = parseInt(e.target.id);
         axios.patch(`http://localhost:3000/todolist/${target}`, {"isComplete": true})
     }));
@@ -166,11 +170,13 @@ const app = async() => {
 };
 
 const postData = async(e) => {
+   e.preventDefault();
    const title = todoTit.value;
    const cont = todoCont.value;
    const start = todoStartDate.dataset.placeholder;
    const end = todoEndDate.dataset.placeholder;
    const target = parseInt(e.target.value);
+   const data = {title, cont, start, end, "isComplete": false, rating};
     
    if(title === '' || start === '' || end === '') {
         if(title === '') {alert("제목을 입력해주세요"); todoTit.focus();}
@@ -180,10 +186,10 @@ const postData = async(e) => {
    };
 
   if(!target){
-    axios.post(`http://localhost:3000/todolist`, {title, cont, start, end, "isComplete": false, rating});
+    axios.post(`http://localhost:3000/todolist`, data);
   }
   else {
-    axios.patch(`http://localhost:3000/todolist/${target}`, {title, cont, start, end, "isComplete": false, rating});
+    axios.patch(`http://localhost:3000/todolist/${target}`, data);
    }
 };
 submitBtn.addEventListener("click", postData);
