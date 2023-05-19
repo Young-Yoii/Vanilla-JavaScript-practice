@@ -46,7 +46,7 @@ li {
   padding: 20px;
 }
 .container .todo__default.none {
-  display: none;
+  display: hide;
 }
 .container .todo__list {
   padding: 15px;
@@ -71,13 +71,13 @@ li {
   background-color: aquamarine;
   padding: 8px;
 }
-.container .todo__date--start-none, .container .todo__date--end-none {
+.container .todo__date--start-hide, .container .todo__date--end-hide {
   display: none;
 }
 .container .todo__rating .clicked {
   color: red;
 }
-.container .todo__rating--none {
+.container .todo__rating--hide {
   display: none;
 }
 

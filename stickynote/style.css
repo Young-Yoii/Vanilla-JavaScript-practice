@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 95%;
+  position: relative;
+}
+
+.memo {
+  position: absolute;
+  background-color: bisque;
+  resize: both;
+  min-width: 300px;
+  min-height: 200px;
+  border: 1px solid #000;
+}
+.memo__header {
+  background: #fff;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #000;
+}
+.memo__text {
+  resize: none;
+}
+.memo__extend {
+  position: absolute;
+  margin: -15px;
+  bottom: 0px;
+  right: 0px;
+  cursor: nw-resize;
+  width: 30px;
+  height: 30px;
+  background-color: black;
+  opacity: 1;
+  z-index: 1;
+}/*# sourceMappingURL=style.css.map */
