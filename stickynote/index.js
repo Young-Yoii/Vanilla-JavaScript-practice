@@ -12,7 +12,7 @@ const addMemo = () => {
     extendBtn.setAttribute('id', 'extendBtn');
     extendBtn.setAttribute('class', 'memo__extend');
     let str = `
-        <div class="" id="memoContainer">
+        <div class="memo__container" id="memoContainer">
             <div id="memoHeader" class="memo__header">
                 <h4>메모</h4>
                 <div class="memo__btn">
@@ -20,9 +20,22 @@ const addMemo = () => {
                     <button id="deleteBtn" class="memo__btn--del">지우기</button>
                 </div>
             </div>
-            <div id="memoContainer" class="memo__container">
+            <div id="memoBody" class="memo__body">
                 <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text"></textarea>
-                <div id="memoOption" class=memo__container--option"></div>
+                <div id="memoOption" class="memo__container--option">
+                    <div id="memoFontDrop" class="memo__font">
+                        <button id="fontBtn" class="font-btn">40px</button>
+                        <ul id="dropMenu" class="drop-menu">
+                            <li>20px</li>
+                            <li>30px</li>
+                            <li>35px</li>
+                            <li>40px</li>
+                            <li>45px</li>
+                            <li>50px</li>
+                            <li>55px</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>  
     `
@@ -31,17 +44,49 @@ const addMemo = () => {
     memo.appendChild(extendBtn);
     positionSticky(memo);
     
+    document.getElementById("fontBtn").addEventListener("click", () => {
+        document.getElementById("dropMenu").classList.toggle("active");
+    })
+    document.querySelectorAll("#dropMenu > li").forEach(el => el.addEventListener("click", (e) =>{
+        console.log(e.target.textContent)
+    }))
     
     const allExtendBtn = document.querySelectorAll("#extendBtn");
     const allMemo = document.querySelectorAll("#memoHeader");
+    const fullScreenBtn = document.querySelectorAll("#fullScreenBtn");
     extendMemo(allExtendBtn);
     dragMemo(allMemo);
+    fullscreen(fullScreenBtn, extendBtn)
 }
-let l = 0;
-let i = 0;
+
+const fullscreen = (fullScreenBtn, extendBtn) => {
+    fullScreenBtn.forEach(item => item.addEventListener("click", (e) => {
+        const target = e.target.closest("#memo");
+        if(target.style.width !== '100%'){
+            container.style.height = '100%';
+            target.setAttribute('data-width', target.style.width.slice(0,3));
+            target.setAttribute('data-height', target.style.height.slice(0,3));
+            target.setAttribute('data-top', target.style.top.slice(0,3));
+            target.setAttribute('data-left', target.style.left.slice(0,3));
+            target.style.left = '0';
+            target.style.top = '0';
+            target.style.width = '100%';
+            target.style.height = '100%';
+            extendBtn.style.display = "none";
+            e.target.innerHTML = "원래 크기로"  
+        }else{
+            container.style.height = '92%';
+            target.style.width = target.getAttribute('data-width') + "px";
+            target.style.height = target.getAttribute('data-height') + "px";
+            target.style.top = target.getAttribute('data-top') + "px";
+            target.style.left = target.getAttribute('data-left') + "px";
+            extendBtn.style.display = "block";
+            e.target.innerHTML = "최대화";
+        }
+    }))
+}
 
 const positionSticky = (memo) => {
-    if(container.innderHTML = ""){
       memo.style.left =
       window.innerWidth / 2 -
       memo.clientWidth / 2 +
@@ -51,14 +96,9 @@ const positionSticky = (memo) => {
       window.innerHeight / 2 -
       memo.clientHeight / 2 +
       (-100 + Math.round(Math.random() * 50)) +
-      'px';  
-    }else {
-        memo.style.left = l + 15 + 'px';
-        memo.style.top = i + 15  + 'px';
-    }
-    l = 15 +  memo.clientX;
-    i = 15;
-    
+      'px'; 
+    memo.style.width = '300px';
+    memo.style.height = '200px'; 
 }
 
 let dragTarget;
@@ -70,7 +110,8 @@ let DEFAULT_W = 300;
 let DEFAULT_H = 200;
 
 const extendMemo = (extendBtn) => {
-    extendBtn.forEach(item => item.addEventListener("mousedown", (e) => {
+    extendBtn.forEach(item => {
+        item.addEventListener("mousedown", (e) => {
         e.stopPropagation();
         isExtending = true;
         let prevX = e.screenX;
@@ -86,6 +127,7 @@ const extendMemo = (extendBtn) => {
                 item.parentNode.style.width = DEFAULT_W + X + "px";
                 item.parentNode.style.height = DEFAULT_H + Y + "px";
                 item.parentNode.style.draggable ="false"
+                e.target.classList.add("show");
             }
             return;
         }
@@ -95,12 +137,15 @@ const extendMemo = (extendBtn) => {
             isExtending = true;
             isDragging = false;
             document.body.style.cursor = "default";
+            e.target.classList.remove("show");
           };
     
           document.addEventListener('mousemove', mouseMoveHandler);
           document.addEventListener('mouseup', mouseUpHandler, { once: true });
-    }));
-}
+    })
+     // item.addEventListener("mouseleave", (e) => e.target.classList.remove("show"))
+    }
+)}
 
 const dragMemo = (allMemo) => {
     allMemo.forEach(item => item.addEventListener('mousedown', e => {
@@ -119,7 +164,17 @@ const dragMemo = (allMemo) => {
     }));
 }
 
+const data = (text, height, width) => {
+    let obj = {
+        "text": text,
+        "height" : height,
+        "width": width
+    }
+    arr.push(obj)
+    console.log(arr)
+}
+
 addMemoBtn.addEventListener("click", addMemo);
-console.log(obj)
+console.log(arr)
 }
 init()
