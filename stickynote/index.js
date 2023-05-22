@@ -2,8 +2,7 @@ const container = document.getElementById('container');
 const addMemoBtn = document.getElementById('addMemoBtn');
 
 let arr = [];
-const init = () => {
-let obj = {"text": "", "width": "300px", "height": "200px"}
+let optionArr = ['#FFF8D1', '#FFDBAB', '#FDD4E2', '#D8DBFF', '#b2ddff', '#b3ece6']
 const addMemo = () => {
     const memo = document.createElement('div');
     memo.setAttribute('id', 'memo');
@@ -11,7 +10,9 @@ const addMemo = () => {
     const extendBtn = document.createElement('div');
     extendBtn.setAttribute('id', 'extendBtn');
     extendBtn.setAttribute('class', 'memo__extend');
-    let str = `
+    let optionStr= '';
+    optionArr.forEach((option,index) => optionStr += `<label class="color-item ${index+1}"><input type="radio" value=${option} name="bg-color"><span class="checkmark"></span></label>`);
+    let basicStr = `
         <div class="memo__container" id="memoContainer">
             <div id="memoHeader" class="memo__header">
                 <h4>메모</h4>
@@ -26,64 +27,30 @@ const addMemo = () => {
                     <div id="memoFontDrop" class="memo__font">
                         <button id="fontBtn" class="font-btn">40px</button>
                         <ul id="dropMenu" class="drop-menu">
-                            <li>20px</li>
-                            <li>30px</li>
-                            <li>35px</li>
-                            <li>40px</li>
-                            <li>45px</li>
-                            <li>50px</li>
-                            <li>55px</li>
+                            <li class="drop-item">20px</li>
+                            <li class="drop-item">30px</li>
+                            <li class="drop-item">35px</li>
+                            <li class="drop-item">40px</li>
+                            <li class="drop-item">45px</li>
+                            <li class="drop-item">50px</li>
+                            <li class="drop-item">55px</li>
                         </ul>
                     </div>
+                   <div class="memo__color">${optionStr}</div>
                 </div>
             </div>
         </div>  
     `
-    memo.innerHTML = str;
+    
+    memo.innerHTML = basicStr;
     container.appendChild(memo);
     memo.appendChild(extendBtn);
     positionSticky(memo);
     
-    document.getElementById("fontBtn").addEventListener("click", () => {
-        document.getElementById("dropMenu").classList.toggle("active");
-    })
-    document.querySelectorAll("#dropMenu > li").forEach(el => el.addEventListener("click", (e) =>{
-        console.log(e.target.textContent)
-    }))
-    
     const allExtendBtn = document.querySelectorAll("#extendBtn");
     const allMemo = document.querySelectorAll("#memoHeader");
-    const fullScreenBtn = document.querySelectorAll("#fullScreenBtn");
     extendMemo(allExtendBtn);
     dragMemo(allMemo);
-    fullscreen(fullScreenBtn, extendBtn)
-}
-
-const fullscreen = (fullScreenBtn, extendBtn) => {
-    fullScreenBtn.forEach(item => item.addEventListener("click", (e) => {
-        const target = e.target.closest("#memo");
-        if(target.style.width !== '100%'){
-            container.style.height = '100%';
-            target.setAttribute('data-width', target.style.width.slice(0,3));
-            target.setAttribute('data-height', target.style.height.slice(0,3));
-            target.setAttribute('data-top', target.style.top.slice(0,3));
-            target.setAttribute('data-left', target.style.left.slice(0,3));
-            target.style.left = '0';
-            target.style.top = '0';
-            target.style.width = '100%';
-            target.style.height = '100%';
-            extendBtn.style.display = "none";
-            e.target.innerHTML = "원래 크기로"  
-        }else{
-            container.style.height = '92%';
-            target.style.width = target.getAttribute('data-width') + "px";
-            target.style.height = target.getAttribute('data-height') + "px";
-            target.style.top = target.getAttribute('data-top') + "px";
-            target.style.left = target.getAttribute('data-left') + "px";
-            extendBtn.style.display = "block";
-            e.target.innerHTML = "최대화";
-        }
-    }))
 }
 
 const positionSticky = (memo) => {
@@ -97,8 +64,8 @@ const positionSticky = (memo) => {
       memo.clientHeight / 2 +
       (-100 + Math.round(Math.random() * 50)) +
       'px'; 
-    memo.style.width = '300px';
-    memo.style.height = '200px'; 
+    memo.style.width = '500px';
+    memo.style.height = '300px'; 
 }
 
 let dragTarget;
@@ -109,6 +76,7 @@ let lastOffsetY = 0;
 let DEFAULT_W = 300;
 let DEFAULT_H = 200;
 
+//사이즈 조절
 const extendMemo = (extendBtn) => {
     extendBtn.forEach(item => {
         item.addEventListener("mousedown", (e) => {
@@ -130,7 +98,7 @@ const extendMemo = (extendBtn) => {
                 e.target.classList.add("show");
             }
             return;
-        }
+        };
 
         const mouseUpHandler = () => {
             document.removeEventListener('mousemove', mouseMoveHandler);
@@ -142,11 +110,10 @@ const extendMemo = (extendBtn) => {
     
           document.addEventListener('mousemove', mouseMoveHandler);
           document.addEventListener('mouseup', mouseUpHandler, { once: true });
-    })
-     // item.addEventListener("mouseleave", (e) => e.target.classList.remove("show"))
-    }
-)}
+    })}
+)};
 
+//드래그앤드롭
 const dragMemo = (allMemo) => {
     allMemo.forEach(item => item.addEventListener('mousedown', e => {
         dragTarget = item.parentNode.parentNode;
@@ -175,6 +142,50 @@ const data = (text, height, width) => {
 }
 
 addMemoBtn.addEventListener("click", addMemo);
-console.log(arr)
-}
-init()
+container.addEventListener("click", (e) => {
+    // 폰트 사이즈 적용
+    if(e.target.className === 'font-btn'){
+        e.target.nextElementSibling.classList.toggle("active")
+    }
+    if(e.target.className === 'drop-item'){
+        const target = e.target.closest('div');
+        const fontSize = e.target.textContent;
+        target.firstElementChild.textContent = fontSize;
+        target.parentNode.previousElementSibling.style.fontSize = fontSize;
+    }
+    // 최대화
+    if(e.target.className === 'memo__btn--fullscreen'){
+        const target = e.target.closest("#memo");
+        const attrArr = [
+            {key: 'width',val: target.style.width},
+            {key: 'height', val: target.style.height},
+            {key: 'top', val: target.style.top},
+            {key: 'left', val: target.style.left}
+        ]
+        if(target.style.width !== '100%'){
+            container.style.height = '100%';
+            attrArr.forEach(attr => {
+                target.setAttribute(`data-${attr.key}`, attr.val.slice(0,3));
+            })
+            target.style.width = `100%`;
+            target.style.height = `100%`;
+            target.style.top = `0`;
+            target.style.left = `0`;
+            target.style.zIndex = '999';
+            container.querySelector('#extendBtn').style.display = "none";
+            e.target.innerHTML = "원래 크기로";
+        }else{
+            container.style.height = '92%';
+            target.style.width = `${target.getAttribute('data-width')}px`;
+            target.style.height = `${target.getAttribute('data-height')}px`;
+            target.style.top = `${target.getAttribute('data-top')}px`;
+            target.style.left = `${target.getAttribute('data-left')}px`;
+            target.style.zIndex = '';
+            container.querySelector('#extendBtn').style.display = "block";
+            e.target.innerHTML = "최대화";
+        }
+    }
+    if(e.target.className === 'color-item'){
+        console.log(e.target)
+    }
+})
