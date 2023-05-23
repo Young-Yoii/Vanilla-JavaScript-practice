@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   margin: 0;
   padding: 0;
@@ -63,6 +64,12 @@ li {
   border-bottom: 1px solid #000;
   height: 50px;
 }
+.memo__btn > button {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+}
 .memo__body {
   height: calc(100% - 51px);
 }
@@ -102,6 +109,14 @@ li {
   background: #fff;
   border: 1px solid #000;
   height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+.memo__font .font-btn::after {
+  content: "▲";
+  display: inline-block;
 }
 .memo__font .drop-menu {
   position: absolute;
@@ -120,45 +135,156 @@ li {
 .memo__font .drop-menu > li {
   cursor: pointer;
 }
+.memo__color {
+  display: flex;
+}
 .memo__color .color-item__1 {
   background-color: #FFF8D1;
   border-top: 4px solid #f0da60;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__1 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__1 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__1 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__1 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }
 .memo__color .color-item__2 {
   background-color: #FFDBAB;
   border-top: 4px solid #fdbb5d;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__2 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__2 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__2 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__2 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }
 .memo__color .color-item__3 {
   background-color: #FDD4E2;
   border-top: 4px solid #fe9abc;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__3 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__3 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__3 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__3 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }
 .memo__color .color-item__4 {
   background-color: #D8DBFF;
   border-top: 4px solid #939bff;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__4 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__4 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__4 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__4 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }
 .memo__color .color-item__5 {
   background-color: #b2ddff;
   border-top: 4px solid #939bff;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__5 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__5 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__5 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__5 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }
 .memo__color .color-item__6 {
   background-color: #b3ece6;
   border-top: 4px solid #70d4c8;
   width: 50px;
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+.memo__color .color-item__6 > input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.memo__color .color-item__6 > input:checked ~ .checkmaker::after {
   display: inline-block;
+}
+.memo__color .color-item__6 .checkmaker {
+  width: 30px;
+  height: 30px;
+}
+.memo__color .color-item__6 .checkmaker::after {
+  content: "✔️";
+  font-size: 20px;
+  display: none;
 }/*# sourceMappingURL=style.css.map */

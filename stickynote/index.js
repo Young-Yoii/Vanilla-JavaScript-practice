@@ -11,14 +11,15 @@ const addMemo = () => {
     extendBtn.setAttribute('id', 'extendBtn');
     extendBtn.setAttribute('class', 'memo__extend');
     let optionStr= '';
-    optionArr.forEach((option,index) => optionStr += `<label class="color-item ${index+1}"><input type="radio" value=${option} name="bg-color"><span class="checkmark"></span></label>`);
+    optionArr.forEach((option,index) => optionStr += `<label id="colorLable" class="color-item__${index+1}"><input type="radio" value=${option} name="bg-color"><span class="checkmaker">
+    </span></label>`);
     let basicStr = `
         <div class="memo__container" id="memoContainer">
             <div id="memoHeader" class="memo__header">
-                <h4>메모</h4>
+                <h4>📝메모</h4>
                 <div class="memo__btn">
-                    <button id="fullScreenBtn" class="memo__btn--fullscreen">최대화</button>
-                    <button id="deleteBtn" class="memo__btn--del">지우기</button>
+                    <button id="fullScreenBtn" class="memo__btn--fullscreen">🖥️</button>
+                    <button id="deleteBtn" class="memo__btn--del">❌</button>
                 </div>
             </div>
             <div id="memoBody" class="memo__body">
@@ -142,50 +143,54 @@ const data = (text, height, width) => {
 }
 
 addMemoBtn.addEventListener("click", addMemo);
+// forEach 메모리 낭비 ==> 이벤트 위임방식으로 변경
 container.addEventListener("click", (e) => {
+    const target = e.target;
+    const div = e.target.closest('div');
+    const memo = e.target.closest("#memo");
+    console.log(e.target)
     // 폰트 사이즈 적용
-    if(e.target.className === 'font-btn'){
-        e.target.nextElementSibling.classList.toggle("active")
+    if(target.className === 'font-btn'){
+        target.nextElementSibling.classList.toggle("active")
     }
-    if(e.target.className === 'drop-item'){
-        const target = e.target.closest('div');
-        const fontSize = e.target.textContent;
-        target.firstElementChild.textContent = fontSize;
-        target.parentNode.previousElementSibling.style.fontSize = fontSize;
+    if(target.className === 'drop-item'){
+        const fontSize = target.textContent;
+        div.firstElementChild.textContent = fontSize;
+        div.parentNode.previousElementSibling.style.fontSize = fontSize;
     }
     // 최대화
-    if(e.target.className === 'memo__btn--fullscreen'){
-        const target = e.target.closest("#memo");
+    if(target.className === 'memo__btn--fullscreen'){
         const attrArr = [
-            {key: 'width',val: target.style.width},
-            {key: 'height', val: target.style.height},
-            {key: 'top', val: target.style.top},
-            {key: 'left', val: target.style.left}
+            {key: 'width',val: memo.style.width},
+            {key: 'height', val: memo.style.height},
+            {key: 'top', val: memo.style.top},
+            {key: 'left', val: memo.style.left}
         ]
-        if(target.style.width !== '100%'){
+        if(memo.style.width !== '100%'){
             container.style.height = '100%';
             attrArr.forEach(attr => {
-                target.setAttribute(`data-${attr.key}`, attr.val.slice(0,3));
+                memo.setAttribute(`data-${attr.key}`, attr.val.slice(0,3));
             })
-            target.style.width = `100%`;
-            target.style.height = `100%`;
-            target.style.top = `0`;
-            target.style.left = `0`;
-            target.style.zIndex = '999';
+            memo.style = 'width: 100%;height: 100%;top: 0%;left: 0%;z-index: 999';
             container.querySelector('#extendBtn').style.display = "none";
-            e.target.innerHTML = "원래 크기로";
+            target.innerHTML = "💻";
         }else{
             container.style.height = '92%';
-            target.style.width = `${target.getAttribute('data-width')}px`;
-            target.style.height = `${target.getAttribute('data-height')}px`;
-            target.style.top = `${target.getAttribute('data-top')}px`;
-            target.style.left = `${target.getAttribute('data-left')}px`;
-            target.style.zIndex = '';
+            memo.style.width = `${memo.getAttribute('data-width')}px`;
+            memo.style.height = `${memo.getAttribute('data-height')}px`;
+            memo.style.top = `${memo.getAttribute('data-top')}px`;
+            memo.style.left = `${memo.getAttribute('data-left')}px`;
+            memo.style.zIndex = '';
             container.querySelector('#extendBtn').style.display = "block";
-            e.target.innerHTML = "최대화";
+            target.innerHTML = "🖥️";
         }
     }
-    if(e.target.className === 'color-item'){
-        console.log(e.target)
+    if(target.getAttribute('id') === 'colorLable' || target.className === 'checkmaker'){
+        let value;
+        target.getAttribute('id') === 'colorLable' ? value = target.firstElementChild.value : value = target.previousElementSibling.value;
+        div.parentNode.previousElementSibling.style.background = value;
+    }
+    if(target.className === 'memo__btn--del'){
+        memo.remove();
     }
 })
