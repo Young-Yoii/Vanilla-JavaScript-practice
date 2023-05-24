@@ -2,8 +2,8 @@ const container = document.getElementById('container');
 const addMemoBtn = document.getElementById('addMemoBtn');
 
 let optionArr = [{color: ['#FFF8D1', '#FFDBAB', '#FDD4E2', '#D8DBFF', '#b2ddff', '#b3ece6'] , 
-                  fontSize: ['20px', '30px', '35px', '40px', '45px', '50px', '55px']}]
-const render = () => {
+                  fontSize: ['20px', '30px', '35px', '40px', '45px', '50px', '55px']}];
+// const render = () => {
 const localData = localStorage.getItem('memo');
 let arr =  JSON.parse(localData) ? JSON.parse(localData) : [];
 
@@ -18,6 +18,7 @@ const addMemo = () => {
     </label>`);
     (optionArr[0].fontSize).forEach(option => fontOptionStr += 
     `<li class="drop-item">${option}</li>`);
+    
     let containStr = `
     <div class="memo__container" id="memoContainer">
         <div id="memoHeader" class="memo__header">
@@ -33,6 +34,7 @@ const addMemo = () => {
         <div class="memo__color">${colorOptionStr}</div>
     </div></div></div>  
     <div id="extendBtn" class="memo__extend"></div>`
+    
     if(flag) {
         arr.forEach(i => container.insertAdjacentHTML('beforeend',  `
         <div id="memo" class="memo" style="width: ${i.width}; height: ${i.height}; top: ${i.top}; left:${i.left};">
@@ -59,11 +61,6 @@ const addMemo = () => {
         container.append(memo);
         positionSticky(memo);
     };
-
-    const allExtendBtn = document.querySelectorAll("#extendBtn");
-    const allMemo = document.querySelectorAll("#memoHeader");
-    extendMemo(allExtendBtn);
-    dragMemo(allMemo);
 }
 
 const positionSticky = (memo) => {
@@ -89,12 +86,34 @@ let lastOffsetY = 0;
 let DEFAULT_W = 300;
 let DEFAULT_H = 200;
 
-//사이즈 조절
-const extendMemo = (extendBtn) => {
-    extendBtn.forEach(item => {
-        item.addEventListener("mousedown", (e) => {
-        e.stopPropagation();
-        const memo = e.target.closest("#memo");
+// 이벤트 리스너
+addMemoBtn.addEventListener("click", addMemo);
+/// forEach 메모리 낭비방지 ==> 이벤트 위임방식으로 변경
+container.addEventListener("mousedown", (e) => {
+    const memo = e.target.closest("#memo");
+    // 드래그앤드롭
+    if(e.target.className === 'memo__header'){
+        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        dragTarget = e.target.parentNode.parentNode;
+        lastOffsetX = e.offsetX;
+        lastOffsetY = e.offsetY;
+        isDragging = true;
+        const drag = (e) => {
+            e.preventDefault();
+            if (!isDragging) return;
+            dragTarget.style.left = e.clientX - lastOffsetX - 20 + 'px';
+            dragTarget.style.top = e.clientY - lastOffsetY - 20 + 'px';
+        }
+        container.addEventListener('mousemove', drag);
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+            arr[find].left = memo.style.left;
+            arr[find].top = memo.style.top;
+            localStorage.setItem('memo',JSON.stringify(arr));
+        });
+    }
+    // 사이즈
+    if(e.target.className === 'memo__extend'){
         const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
         isExtending = true;
         let prevX = e.screenX;
@@ -106,9 +125,9 @@ const extendMemo = (extendBtn) => {
             const Y = e.screenY - prevY - 40;
             if(isExtending){
                 document.body.style.cursor = "nw-resize";
-                item.parentNode.style.width = DEFAULT_W + X + "px";
-                item.parentNode.style.height = DEFAULT_H + Y + "px";
-                item.parentNode.style.draggable ="false"
+                memo.style.width = DEFAULT_W + X + "px";
+                memo.style.height = DEFAULT_H + Y + "px";
+                memo.style.draggable ="false"
                 e.target.classList.add("show");
             }
             return;
@@ -125,44 +144,14 @@ const extendMemo = (extendBtn) => {
           };
           document.addEventListener('mousemove', mouseMoveHandler);
           document.addEventListener('mouseup', mouseUpHandler, { once: true });
-    })}
-)};
-
-//드래그앤드롭
-const dragMemo = (allMemo) => {
-    allMemo.forEach(item => item.addEventListener('mousedown', e => {
-        const memo = e.target.closest("#memo");
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
-        console.log(find, memo,dragTarget)
-        lastOffsetX = e.offsetX;
-        lastOffsetY = e.offsetY;
-        isDragging = true;
-        const drag = (e) => {
-            e.preventDefault();
-            if (!isDragging) return;
-            memo.style.left = e.clientX - lastOffsetX - 20 + 'px';
-            memo.style.top = e.clientY - lastOffsetY - 20 + 'px';
-        }
-        container.addEventListener('mousemove', drag);
-        container.addEventListener('mouseup', () => {
-            isDragging = false;
-            arr[find].left = memo.style.left;
-            arr[find].top = memo.style.top;
-            localStorage.setItem('memo',JSON.stringify(arr));
-        });
-    }));
-}
-
-addMemoBtn.addEventListener("click", addMemo);
-/// forEach 메모리 낭비 ==> 이벤트 위임방식으로 변경
+    }
+})
 container.addEventListener("click", (e) => {
     let target = e.target;
-    if(target.className === 'container' && target.className === 'memo__extend' ){return;}
     const memo = e.target.closest("#memo");
-    const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
-    if(find === -1) return;
     // 메모 내용
     if(target.className === 'memo__text'){
+        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
         target.addEventListener("change", (e) => {
             let flag = arr.length >= container.childElementCount ? true : false;
             //내용 업데이트
@@ -176,18 +165,19 @@ container.addEventListener("click", (e) => {
                 'height': memo.style.top, 
                 'top':  memo.style.top, 
                 'left':  memo.style.left, 
-                'fontSize': target.style.fontSize, 
-                'backgroundColor': target.style.background}
+                'fontSize': e.target.style.fontSize, 
+                'backgroundColor': e.target.style.background}
                 arr.push(data);
             }
             localStorage.setItem('memo',JSON.stringify(arr))
         })
     }
-    // 폰트 사이즈 적용
     if(target.className === 'font-btn'){
         target.nextElementSibling.classList.toggle("active")
     }
+    // 폰트 사이즈 적용
     if(target.className === 'drop-item'){
+        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
         const fontSize = target.textContent;
         memo.querySelector('.font-btn').textContent = fontSize;
         memo.querySelector('.memo__text').style.fontSize = fontSize;
@@ -221,19 +211,51 @@ container.addEventListener("click", (e) => {
             target.innerHTML = "🖥️";
         }
     }
+    // 배경색
     if(target.getAttribute('id') === 'colorLable' || target.className === 'checkmaker'){
+        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
         target.className === 'checkmaker' ? target = target.parentNode : target
         memo.querySelector('.memo__text').style.background = target.firstElementChild.value;
         arr[find].backgroundColor = target.firstElementChild.value;
         localStorage.setItem('memo',JSON.stringify(arr));
     }
-    //삭제
+    // 삭제
     if(target.className === 'memo__btn--del'){
         memo.remove();
         const filter = arr.filter(item => item.content !== memo.querySelector('.memo__text').value);
         arr = filter;
         localStorage.setItem('memo',JSON.stringify(arr))
     }
-    return;
-})}
-render();
+})
+// }
+// render()
+
+// let currentObserver = null;
+
+// const observe = fn => {
+//   currentObserver = fn;
+//   fn();
+//   currentObserver = null;
+// }
+
+// const observable = obj => {
+//   Object.keys(obj).forEach(key => {
+//     let _value = obj[key];
+//     const observers = new Set();
+
+//     Object.defineProperty(obj, key, {
+//       get () {
+//         if (currentObserver) observers.add(currentObserver);
+//         return _value;
+//       },
+
+//       set (value) {
+//         _value = value;
+//         observers.forEach(fn => fn());
+//       }
+//     })
+//   })
+//   return obj;
+// }
+
+// observe(render);
