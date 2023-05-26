@@ -2,8 +2,7 @@ const container = document.getElementById('container');
 const addMemoBtn = document.getElementById('addMemoBtn');
 
 let optionArr = [{color: ['#fff8d1', '#ffdbab', '#fdd4e2', '#d8d8ff', '#b2ddff', '#b3ece6'] , 
-                  fontSize: ['20px', '30px', '35px', '40px', '45px', '50px', '55px']}];
-// const render = () => {
+                  fontSize: ['20px', '30px', '35px', '40px', '45px', '50px', '55px', '60px', '70px']}];
 const localData = localStorage.getItem('memo');
 let arr =  JSON.parse(localData) ? JSON.parse(localData) : [];
 
@@ -17,7 +16,7 @@ const addMemo = () => {
         let colorOptionStr= '';
         (optionArr[0].color).forEach((option,index) => colorOptionStr += 
         `<label id="colorLable" class="color-item__${index+1}">
-            <input type="radio" value=${option} name="bg-color${idx}" ${(i.backgroundColor || '#fff8d1') === option && 'checked = true'}>
+            <input type="radio" value=${option} name="bg-color${idx}" ${(i.backgroundColor === 'rgb(255, 248, 209)' ? i.backgroundColor = '#fff8d1' : i.backgroundColor || '#fff8d1') === option && 'checked = true'}>
             <span class="checkmaker"></span>
         </label>`);  
         return colorOptionStr;
@@ -35,9 +34,8 @@ const addMemo = () => {
     <div id="memoBody" class="memo__body">`;
 
     if(flag) {
-        arr.forEach((i, idx) => {
-            container.insertAdjacentHTML('beforeend',  `
-        <div id="memo" class="memo" style="width: ${i.width};height: ${i.height};top: ${i.top};left: ${i.left};">
+        arr.forEach((i, idx) => {container.insertAdjacentHTML('beforeend',  `
+        <div id="memo" class="memo" style="width: ${i.width};height: ${i.height};top: ${i.top};left: ${i.left};" data-id=${idx}>
             ${containStr}
                 <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text" style="background: ${i.backgroundColor};font-size: ${i.fontSize};">${i.content}</textarea>
                 <div id="memoOption" class="memo__container--option">
@@ -50,14 +48,13 @@ const addMemo = () => {
                 </div>
             </div></div></div>  
             <div id="extendBtn" class="memo__extend"></div>
-        </div>`);
-
-    });
+        </div>`);console.log(i.backgroundColor)});
     }else {
         const memo = document.createElement('div');
         memo.setAttribute('id', 'memo');
         memo.setAttribute('class', 'memo');
         let idx = document.querySelectorAll('#memo').length;
+        memo.setAttribute('data-id', idx);
         let str = `
             ${containStr}
              <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text" style="background: #fff8d1;font-size: 40px;"></textarea>
@@ -111,7 +108,7 @@ container.addEventListener("mousedown", (e) => {
     const memo = e.target.closest("#memo");
     // 드래그앤드롭
     if(e.target.className === 'memo__header'){
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        const find = arr.findIndex(item => item.id === memo.getAttribute('data-id'));
         dragTarget = e.target.parentNode.parentNode;
         lastOffsetX = e.offsetX;
         lastOffsetY = e.offsetY;
@@ -132,7 +129,7 @@ container.addEventListener("mousedown", (e) => {
     }
     // 사이즈
     if(e.target.className === 'memo__extend'){
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        const find = arr.findIndex(item => item.id === memo.getAttribute('data-id'));
         isExtending = true;
         let prevX = e.screenX;
         let prevY = e.screenY;  
@@ -170,16 +167,18 @@ container.addEventListener("click", (e) => {
     const memo = e.target.closest("#memo");
     // 메모 내용
     if(target.className === 'memo__text'){
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        const find = arr.findIndex(item => item.id === memo.getAttribute('data-id'));
         target.addEventListener("change", (e) => {
             let flag = arr.length >= container.childElementCount ? true : false;
             //내용 업데이트
             if(flag){
-                let value = ''
+                let value = '';
                 value = target.value;
                 arr[find].content = value;
             }else{ //새 데이터 추가
-                let data = {'content': target.value, 
+                let data = {
+                'id': memo.getAttribute("data-id"),
+                'content': target.value, 
                 'width': memo.style.width, 
                 'height': memo.style.top, 
                 'top':  memo.style.top, 
@@ -188,28 +187,27 @@ container.addEventListener("click", (e) => {
                 'backgroundColor': e.target.style.background}
                 arr.push(data);
             }
-            localStorage.setItem('memo',JSON.stringify(arr))
-        })
-    }
+            localStorage.setItem('memo',JSON.stringify(arr));
+        });
+    };
     if(target.className === 'font-btn'){
-        target.nextElementSibling.classList.toggle("active")
-    }
+        target.nextElementSibling.classList.toggle("active");
+    };
     // 폰트 사이즈 적용
     if(target.className === 'drop-item'){
         const idx = memos.indexOf(memo);
-        let beforeSelected = document.getElementsByClassName('selected')[idx]
+        let beforeSelected = document.getElementsByClassName('selected')[idx];
         if(beforeSelected && document.getElementsByClassName('selected')[idx] !== target){
             beforeSelected.classList.remove('selected');
         }
         target.classList.toggle("selected");
-        target.sl
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        const find = arr.findIndex(item => item.id === memo.getAttribute('data-id'));
         const fontSize = target.textContent;
         memo.querySelector('.font-btn').textContent = fontSize;
         memo.querySelector('.memo__text').style.fontSize = fontSize;
         arr[find].fontSize = target.textContent;
         localStorage.setItem('memo',JSON.stringify(arr));
-    }
+    };
     // 최대화
     if(target.className === 'memo__btn--fullscreen'){
         const attrArr = [
@@ -236,52 +234,32 @@ container.addEventListener("click", (e) => {
             container.querySelector('#extendBtn').style.display = "block";
             target.innerHTML = "🖥️";
         }
-    }
+    };
     // 배경색
     if(target.getAttribute('id') === 'colorLable' || target.className === 'checkmaker'){
-        const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
+        const find = arr.findIndex(item => item.id === memo.getAttribute('data-id'));
         target.className === 'checkmaker' ? target = target.parentNode : target
-        memo.querySelector('.memo__text').style.background = target.firstElementChild.value;
+        memo.querySelector('.memo__text').style.backgroundColor = target.firstElementChild.value;
         arr[find].backgroundColor = target.firstElementChild.value;
         localStorage.setItem('memo',JSON.stringify(arr));
-    }
+    };
     // 삭제
     if(target.className === 'memo__btn--del'){
         memo.remove();
-        const filter = arr.filter(item => item.content !== memo.querySelector('.memo__text').value);
+        const filter = arr.filter(item => item.id !== memo.getAttribute('data-id'));
         arr = filter;
         localStorage.setItem('memo',JSON.stringify(arr))
-    }
+    };
 })
-// }
-// render()
-
-// let currentObserver = null;
-
-// const observe = fn => {
-//   currentObserver = fn;
-//   fn();
-//   currentObserver = null;
-// }
-
-// const observable = obj => {
-//   Object.keys(obj).forEach(key => {
-//     let _value = obj[key];
-//     const observers = new Set();
-
-//     Object.defineProperty(obj, key, {
-//       get () {
-//         if (currentObserver) observers.add(currentObserver);
-//         return _value;
-//       },
-
-//       set (value) {
-//         _value = value;
-//         observers.forEach(fn => fn());
-//       }
-//     })
-//   })
-//   return obj;
-// }
-
-// observe(render);
+container.addEventListener('mouseover', (e) => {
+    if(e.target.className === 'memo__header' || e.target.className === 'memo__text'){
+      e.target.closest('.memo__container').parentNode.querySelector('.memo__extend').classList.add('show');
+    }
+    return;
+})
+container.addEventListener('mouseout', (e) => {
+    if(e.target.className === 'memo__header' || e.target.className === 'memo__text'){
+      e.target.closest('.memo__container').parentNode.querySelector('.memo__extend').classList.remove('show');
+    }
+    return;
+})
