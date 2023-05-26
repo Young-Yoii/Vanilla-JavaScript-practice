@@ -2,7 +2,8 @@ import axios from './node_modules/axios/dist/esm/axios.min.js';
 
 const titleInput = document.getElementById("titleInput");
 const titleText = document.getElementById("titleText");
-const titleBtn = document.getElementById("titleBtn");
+const submitBtn = document.getElementById("submitBtn");
+const cancleBtn = document.getElementById("cancleBtn");
 const btnWrap = document.getElementById("btnWrap");
 const shuffleBtn = document.getElementById("shuffleBtn");
 const studetsList = document.getElementById("studetsList");
@@ -13,18 +14,26 @@ let shuffling;
 // 제목 세팅 이벤트 리스너
 titleInput.addEventListener("input", (e) => {
     if((e.target.value).length > 0) {
-        titleBtn.classList.add("show");
+        submitBtn.classList.add("show");
     }
 })
-titleBtn.addEventListener("click", () => {
+submitBtn.addEventListener("click", () => {
     titleInput.classList.remove("show");
     titleText.classList.add("show");
-    titleBtn.classList.remove("show");
+    submitBtn.classList.remove("show");
+    cancleBtn.classList.remove("show");
     titleText.innerHTML = titleInput.value;
+})
+cancleBtn.addEventListener("click", () => {
+    titleInput.classList.remove("show");
+    titleText.classList.add("show");
+    submitBtn.classList.remove("show");
+    cancleBtn.classList.remove("show");
 })
 titleText.addEventListener("click", () => {
     titleInput.classList.add("show");
     titleText.classList.remove("show");
+    cancleBtn.classList.add("show");
 })
 
 // 셔플 관련 함수
@@ -35,9 +44,9 @@ const setContents = async() => {
 
     const setView = (studentArr) => {
         studentArr.forEach((student) => studetsList.insertAdjacentHTML('beforeend', `
-        <div class="student">
+        <div class="student" style="background:${student.gender === 'male' ? 'skyblue' : 'lightpink'}">
             <p>${student.name}</p>
-            <button type="button" id="excludeBtn">x</button>
+            <button type="button" id="excludeBtn" class="student__exclud-btn">❌</button>
         </div>
     `))
     const $excludeBtn = document.querySelectorAll('#excludeBtn');
@@ -88,16 +97,19 @@ const setContents = async() => {
         for(let i = 0; i < num; i++){
             selectStudents.push(studentArr[i]);
         }
-        str += `<div class="pick-student">`
-        selectStudents.forEach(student => str += `<p class="pick-student__pick">${student.name}</p>`)
-        str +=  `</div>`
-        str += `<button type="button" id="reSuffleBtn">다시뽑기</button>`
-        modal.innerHTML = str;
+        selectStudents.forEach(student => str += `<p class="pick-student__pick" style="background:${student.gender === 'male' ? 'skyblue' : 'lightpink'}">${student.name}</p>`)
 
-        document.getElementById('reSuffleBtn').addEventListener('click', () => {
-            shuffle();
-            modalView();
-        });
+        modal.innerHTML = `
+            <div class="modal__wrap">
+                <div class="btn-wrap">
+                    <button type="button" id="reSuffleBtn" class="resuffle-btn">다시뽑기</button>
+                    <button id="closeBtn" class="close-btn">✖️</button>
+                </div>
+                <div class="modal__inner">
+                    ${str}
+                </div>
+            </div>
+        `
         
         // 중복학생 제외
         if(check){
@@ -108,29 +120,30 @@ const setContents = async() => {
     // 모달 화면 그리기
     const modalView = () => {
         modal.innerHTML = `
-            <button id="closeBtn" class="close_btn">x</button>
-            <div class="modal_wrap">
-                <div class="modal_inner">
-                    <input type="number" id="drawNum" placeholder="몇명을 뽑을건가요?" min="1" value="1">
-                    <input type="checkbox" id="chck1">
-                    <label for="chck1">뽑힌학생 제외하기</label>
-                    <button type="button" id="stopBtn">뽑기</button>
+            <div class="modal__wrap">
+                <div class="btn-wrap">
+                    <button id="closeBtn" class="close-btn">✖️</button>
+                </div>
+                <div class="modal__inner">
+                    <div>
+                        <input type="number" id="drawNum" placeholder="몇명을 뽑을건가요?" min="1" value="1">
+                        <label for="chck1">
+                            <input type="checkbox" id="chck1">
+                            뽑힌학생 제외하기
+                        </label>
+                    </div>
+                    <button type="button" id="stopBtn" class="stop-btn">🕹️</button>
                 </div>
             </div>
         `
         const $drawNum = document.getElementById('drawNum');
         const $stopBtn = document.getElementById('stopBtn');
         const $checkVal = document.getElementById('chck1');
-        const $closeBtn = document.getElementById('closeBtn');
         
         $stopBtn.addEventListener('click', () => {
             clearInterval(shuffling);
             selectStudent($drawNum.value, $checkVal.checked)
         })
-        $closeBtn.addEventListener("click", function(){
-            modal.classList.remove("show");
-            clearInterval(shuffling);
-        });
     };
 
     shuffleBtn.addEventListener('click', () => {
@@ -138,5 +151,16 @@ const setContents = async() => {
         modal.classList.add('show');
         modalView();
     });
+
+    modal.addEventListener('click', (e) => {
+        if(e.target.className === 'close-btn'){
+            modal.classList.remove("show");
+            clearInterval(shuffling);
+        }
+        if(e.target.className === 'resuffle-btn'){
+            shuffle();
+            modalView();
+        }
+    })
 }
 setContents();

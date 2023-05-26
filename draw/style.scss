@@ -1,19 +1,41 @@
-.title {display: flex;
+.main {width: 100%;height: 100vh;overflow: hidden;
+    .shuffle_btn {font-family: 'Noto Sans KR', sans-serif;font-size: 20px;margin: 0 auto;display: block;width: 100px;height: 100px;background-color: aquamarine;border-radius: 50%;border: none;}
+}
+.container {width: 100%;height: 85%;position: relative;}
+.title {display: flex;border-bottom: 2px solid #f92f60;margin: 30px 0;justify-content: space-between;align-items: center;
     .show {display: block;}
-    &__text, &__btn, &__input {display: none;}
+    &__text, &__cancle-btn, &__submit-btn, &__input {display: none;}
     &__text {cursor: pointer;}
+    &__text, &__input {margin: 10px 0;}
+    &__input {border: none;width: 80%;font-size: 16px;}
+    &__btn-wrap {display: flex;font-size: 16px;
+        & button {border: none;background: none;font-size: 16px;}
+    }   
 }
 .contents {position: relative;
     .student-list__wrap {display: grid;grid-template-columns: repeat(6, 1fr);gap: 10px;}
-    .student {border: 1px solid #000;}
+    .student {display: flex;align-items: center;justify-content: space-between;
+        &__exclud-btn {border: none;background: none;}
+    }
     .btn_wrap {display: none;
         &.show {display: flex;justify-content: space-between;}
     }
 }
 .modal {width: 100%;margin: 0 auto;background-color: rgba(0,0,0,0.7);height: 100%;position: absolute;top: 0;left: 0;display: none;
     &.show {display: block;}
-    &_wrap {background: #fff;opacity: 1;width: 500px;height: auto;max-height: 400px;overflow: auto;margin: 0 auto;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 30px;box-sizing: border-box;}
+    &__wrap {opacity: 1;width: 600px;height: auto;max-height: 400px;overflow: auto;margin: 0 auto;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 30px;box-sizing: border-box;
+        button {background-color: #fff;border: none;}
+        .btn-wrap {display: flex;justify-content: flex-end;
+            button {margin-bottom: 5px;padding: 5px;}
+            button + button {margin-left: 5px;}
+        }
+        .stop-btn {font-size: 30px; border-radius: 50%;padding: 5px;background: #ccc;}
+    }
+    &__inner {background: #fff;padding: 30px 20px;display: flex;align-items: center;justify-content: space-around;
+        input[type='number'] {border: 1px solid #ccc;padding: 10px;border-radius: 15px;}
+        input[type='checkbox'] {border: 1px solid #ccc;padding: 10px;}
+    }
     .pick-student {display: flex;
-        &__pick{border: 1px solid #000;background: #fff;}
+        &__pick{background: #fff;padding: 10px 30px;}
     }
 }

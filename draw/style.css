@@ -1,14 +1,58 @@
+.main {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+.main .shuffle_btn {
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 20px;
+  margin: 0 auto;
+  display: block;
+  width: 100px;
+  height: 100px;
+  background-color: aquamarine;
+  border-radius: 50%;
+  border: none;
+}
+
+.container {
+  width: 100%;
+  height: 85%;
+  position: relative;
+}
+
 .title {
   display: flex;
+  border-bottom: 2px solid #f92f60;
+  margin: 30px 0;
+  justify-content: space-between;
+  align-items: center;
 }
 .title .show {
   display: block;
 }
-.title__text, .title__btn, .title__input {
+.title__text, .title__cancle-btn, .title__submit-btn, .title__input {
   display: none;
 }
 .title__text {
   cursor: pointer;
+}
+.title__text, .title__input {
+  margin: 10px 0;
+}
+.title__input {
+  border: none;
+  width: 80%;
+  font-size: 16px;
+}
+.title__btn-wrap {
+  display: flex;
+  font-size: 16px;
+}
+.title__btn-wrap button {
+  border: none;
+  background: none;
+  font-size: 16px;
 }
 
 .contents {
@@ -20,7 +64,13 @@
   gap: 10px;
 }
 .contents .student {
-  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.contents .student__exclud-btn {
+  border: none;
+  background: none;
 }
 .contents .btn_wrap {
   display: none;
@@ -43,10 +93,9 @@
 .modal.show {
   display: block;
 }
-.modal_wrap {
-  background: #fff;
+.modal__wrap {
   opacity: 1;
-  width: 500px;
+  width: 600px;
   height: auto;
   max-height: 400px;
   overflow: auto;
@@ -58,10 +107,47 @@
   padding: 30px;
   box-sizing: border-box;
 }
+.modal__wrap button {
+  background-color: #fff;
+  border: none;
+}
+.modal__wrap .btn-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+.modal__wrap .btn-wrap button {
+  margin-bottom: 5px;
+  padding: 5px;
+}
+.modal__wrap .btn-wrap button + button {
+  margin-left: 5px;
+}
+.modal__wrap .stop-btn {
+  font-size: 30px;
+  border-radius: 50%;
+  padding: 5px;
+  background: #ccc;
+}
+.modal__inner {
+  background: #fff;
+  padding: 30px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.modal__inner input[type=number] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 15px;
+}
+.modal__inner input[type=checkbox] {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
 .modal .pick-student {
   display: flex;
 }
 .modal .pick-student__pick {
-  border: 1px solid #000;
   background: #fff;
+  padding: 10px 30px;
 }/*# sourceMappingURL=style.css.map */

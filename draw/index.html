@@ -8,17 +8,22 @@
     <title>랜덥뽑기</title>
 </head>
 <body>
-    <div id="main">
-        <div class="title">
-            <input type="text" id="titleInput" class="title__input" placeholder="제목을 입력해주세요" autocomplete="off">
-            <p id="titleText" class="title__text show">랜덤뽑기 제목</p>
-            <button id="titleBtn" class="title__btn">저장</button>    
-        </div>
-        <div id="contents" class="contents">
-            <div id="btnWrap" class="btn_wrap">
-                <button id="shuffleBtn" class="shuffle_btn" name="shuffle">뽑기</button>
+    <div id="main" class="main">
+        <div class="container">
+            <div class="title">
+                <input type="text" id="titleInput" class="title__input" placeholder="제목을 입력해주세요" autocomplete="off">
+                <p id="titleText" class="title__text show">랜덤뽑기 제목</p>
+                <div class="title__btn-wrap">
+                    <button id="cancleBtn" class="title__cancle-btn">✖️</button>  
+                    <button id="submitBtn" class="title__submit-btn">✔️</button>        
+                </div>
             </div>
-            <div id="studetsList" class="student-list__wrap"></div>
+            <div id="contents" class="contents">
+                <div id="studetsList" class="student-list__wrap"></div>
+            </div>
+        </div>
+        <div id="btnWrap" class="btn_wrap">
+            <button id="shuffleBtn" class="shuffle_btn" name="shuffle">뽑기</button>
         </div>
         <div class="modal" id="modal"></div>
     </div>
