@@ -1,23 +1,27 @@
 const container = document.getElementById('container');
 const addMemoBtn = document.getElementById('addMemoBtn');
 
-let optionArr = [{color: ['#FFF8D1', '#FFDBAB', '#FDD4E2', '#D8DBFF', '#b2ddff', '#b3ece6'] , 
+let optionArr = [{color: ['#fff8d1', '#ffdbab', '#fdd4e2', '#d8d8ff', '#b2ddff', '#b3ece6'] , 
                   fontSize: ['20px', '30px', '35px', '40px', '45px', '50px', '55px']}];
 // const render = () => {
 const localData = localStorage.getItem('memo');
 let arr =  JSON.parse(localData) ? JSON.parse(localData) : [];
 
 const addMemo = () => {
-    let colorOptionStr= '';
     let fontOptionStr= '';
     let flag = arr.length <= container.childElementCount ? false : true;
-    (optionArr[0].color).forEach((option,index) => colorOptionStr += 
-    `<label id="colorLable" class="color-item__${index+1}">
-        <input type="radio" value=${option} name="bg-color">
-        <span class="checkmaker"></span>
-    </label>`);
     (optionArr[0].fontSize).forEach(option => fontOptionStr += 
     `<li class="drop-item">${option}</li>`);
+
+    const setBgColor = (i, idx, optionArr) => {
+        let colorOptionStr= '';
+        (optionArr[0].color).forEach((option,index) => colorOptionStr += 
+        `<label id="colorLable" class="color-item__${index+1}">
+            <input type="radio" value=${option} name="bg-color${idx}" ${(i.backgroundColor || '#fff8d1') === option && 'checked = true'}>
+            <span class="checkmaker"></span>
+        </label>`);  
+        return colorOptionStr;
+    }
     
     let containStr = `
     <div class="memo__container" id="memoContainer">
@@ -28,39 +32,53 @@ const addMemo = () => {
                 <button id="deleteBtn" class="memo__btn--del">❌</button>
             </div>
         </div>
-    <div id="memoBody" class="memo__body">`
-    let bodyStr = `<ul id="dropMenu" class="drop-menu">${fontOptionStr}</ul>
-        </div>
-        <div class="memo__color">${colorOptionStr}</div>
-    </div></div></div>  
-    <div id="extendBtn" class="memo__extend"></div>`
-    
+    <div id="memoBody" class="memo__body">`;
+
     if(flag) {
-        arr.forEach(i => container.insertAdjacentHTML('beforeend',  `
-        <div id="memo" class="memo" style="width: ${i.width}; height: ${i.height}; top: ${i.top}; left:${i.left};">
+        arr.forEach((i, idx) => {
+            container.insertAdjacentHTML('beforeend',  `
+        <div id="memo" class="memo" style="width: ${i.width};height: ${i.height};top: ${i.top};left: ${i.left};">
             ${containStr}
                 <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text" style="background: ${i.backgroundColor};font-size: ${i.fontSize};">${i.content}</textarea>
                 <div id="memoOption" class="memo__container--option">
                     <div id="memoFontDrop" class="memo__font">
                         <button id="fontBtn" class="font-btn">${i.fontSize}</button>
-                    ${bodyStr}
-        </div>`));
+                        <ul id="dropMenu" class="drop-menu">${fontOptionStr}</ul>
+                    </div>
+                    <div class="memo__color">
+                    ${setBgColor(i, idx, optionArr)}
+                </div>
+            </div></div></div>  
+            <div id="extendBtn" class="memo__extend"></div>
+        </div>`);
+
+    });
     }else {
         const memo = document.createElement('div');
         memo.setAttribute('id', 'memo');
         memo.setAttribute('class', 'memo');
+        let idx = document.querySelectorAll('#memo').length;
         let str = `
             ${containStr}
-             <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text" style="background: #FFF8D1;font-size: 40px;"></textarea>
+             <textarea id="memoText" placeholder="내용을 입력하세요" class="memo__text" style="background: #fff8d1;font-size: 40px;"></textarea>
              <div id="memoOption" class="memo__container--option">
                 <div id="memoFontDrop" class="memo__font">
                     <button id="fontBtn" class="font-btn">40px</button>
-                    ${bodyStr}
-        `
+                    <ul id="dropMenu" class="drop-menu">${fontOptionStr}</ul>
+                </div>
+                <div class="memo__color">${setBgColor('#fff8d1', idx, optionArr)}</div>
+            </div>
+            </div>
+        </div>  
+        <div id="extendBtn" class="memo__extend"></div>`
         memo.innerHTML = str;
         container.append(memo);
         positionSticky(memo);
     };
+    
+    // 최초 폰트사이즈 색 세팅
+    const allFontSize = document.querySelectorAll('.drop-item');
+    allFontSize.forEach(i => i.parentNode.previousElementSibling.textContent === i.textContent && i.classList.add('selected'));
 }
 
 const positionSticky = (memo) => {
@@ -148,6 +166,7 @@ container.addEventListener("mousedown", (e) => {
 })
 container.addEventListener("click", (e) => {
     let target = e.target;
+    const memos = Array.from(document.querySelectorAll("#memo"));
     const memo = e.target.closest("#memo");
     // 메모 내용
     if(target.className === 'memo__text'){
@@ -177,6 +196,13 @@ container.addEventListener("click", (e) => {
     }
     // 폰트 사이즈 적용
     if(target.className === 'drop-item'){
+        const idx = memos.indexOf(memo);
+        let beforeSelected = document.getElementsByClassName('selected')[idx]
+        if(beforeSelected && document.getElementsByClassName('selected')[idx] !== target){
+            beforeSelected.classList.remove('selected');
+        }
+        target.classList.toggle("selected");
+        target.sl
         const find = arr.findIndex(item => item.content === memo.querySelector('.memo__text').value);
         const fontSize = target.textContent;
         memo.querySelector('.font-btn').textContent = fontSize;
@@ -201,7 +227,7 @@ container.addEventListener("click", (e) => {
             container.querySelector('#extendBtn').style.display = "none";
             target.innerHTML = "💻";
         }else{
-            container.style.height = '92%';
+            container.style.height = '88%';
             memo.style.width = `${memo.getAttribute('data-width')}px`;
             memo.style.height = `${memo.getAttribute('data-height')}px`;
             memo.style.top = `${memo.getAttribute('data-top')}px`;
