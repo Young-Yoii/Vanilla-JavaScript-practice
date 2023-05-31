@@ -188,7 +188,7 @@ const setContents = async() => {
         const $lineValue = document.querySelectorAll('input[name=rdo-line]');
         const $seatValue = document.querySelectorAll('input[name=rdo-seat]');
 
-        $seatValue.forEach((item)=> item.addEventListener('change', function(e){
+        $seatValue.forEach(item => item.addEventListener('change', e => {
             const id = e.target.id;
             if(id === "rdo-seat2") {
                 studetsSeatcls.remove("rdo-seat1");
@@ -200,19 +200,19 @@ const setContents = async() => {
                 $gender.classList.remove("show");
             }
         }));
-        $lineValue.forEach((item)=> item.addEventListener('change', function(e){
+        $lineValue.forEach(item => item.addEventListener('change', e => {
             const id = e.target.id;
             studetsSeatcls.contains("rdo-seat2") 
             ? studetsSeat.className = `student_seat__wrap rdo-seat2 ${id}` 
             : studetsSeat.className = `student_seat__wrap rdo-seat1 ${id}`
         }));
-        $closeBtn.addEventListener("click", function(){
+        $closeBtn.addEventListener("click", () => {
             modal.classList.remove("show");
             clearInterval(shuffling);
         });
 
         if($submitBtn) {
-            $submitBtn.addEventListener("click", function(){
+            $submitBtn.addEventListener("click", () => {
                 seatType = document.querySelector('input[type=radio][name=rdo-seat]:checked').value;
                 $gender.classList.contains('show')
                 ? genderType = document.querySelector('input[type=radio][name=rdo-gender]:checked').value 
@@ -221,7 +221,7 @@ const setContents = async() => {
             });  
         }
         if($stopBtn){
-            $stopBtn.addEventListener("click", function(){
+            $stopBtn.addEventListener("click", () => {
                 modal.classList.remove("show");
                 clearInterval(shuffling)
             });

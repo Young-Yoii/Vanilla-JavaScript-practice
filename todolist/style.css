@@ -45,8 +45,8 @@ li {
 .container .todo__default {
   padding: 20px;
 }
-.container .todo__default.none {
-  display: hide;
+.container .todo__default.hide {
+  display: none;
 }
 .container .todo__list {
   padding: 15px;
@@ -77,7 +77,7 @@ li {
 .container .todo__rating .clicked {
   color: red;
 }
-.container .todo__rating--hide {
+.container .todo__rating.hide {
   display: none;
 }
 

@@ -95,6 +95,99 @@ let DEFAULT_H = 200;
 // 이벤트 리스너
 addMemoBtn.addEventListener("click", addMemo);
 /// forEach 메모리 낭비방지 ==> 이벤트 위임방식으로 변경
+container.addEventListener("click", (e) => {
+    let target = e.target;
+    const memo = e.target.closest("#memo");
+    // 메모 내용
+    if(target.className === 'memo__text'){
+        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
+        target.addEventListener("change", () => {
+            let flag = arr.length >= container.childElementCount ? true : false;
+            if(flag){
+                arr[find].content = target.value;
+            }else{
+                let data = {
+                'id': arr.length,
+                'content': target.value, 
+                'width': memo.style.width, 
+                'height': memo.style.top, 
+                'top':  memo.style.top, 
+                'left':  memo.style.left, 
+                'fontSize': target.style.fontSize, 
+                'backgroundColor': target.style.background
+                };
+                arr.push(data);
+            }
+            localStorage.setItem('memo',JSON.stringify(arr));
+        });
+    };
+    if(target.className === 'font-btn'){
+        target.nextElementSibling.classList.toggle("active");
+    };
+    // 폰트 사이즈 적용
+    if(target.className === 'drop-item'){
+        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
+        const idx = Array.from(document.querySelectorAll('#memo')).indexOf(memo);
+        let beforeSelected = document.getElementsByClassName('selected')[idx];
+        if(beforeSelected && beforeSelected !== target){
+            beforeSelected.classList.remove('selected');
+        }
+        target.classList.toggle("selected");
+        const fontSize = target.textContent;
+        memo.querySelector('.font-btn').textContent = fontSize;
+        memo.querySelector('.memo__text').style.fontSize = fontSize;
+        arr[find].fontSize = fontSize;
+        localStorage.setItem('memo',JSON.stringify(arr));
+    };
+    // 최대화
+    if(target.className === 'memo__btn--fullscreen'){
+        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
+        let str = '';
+        const attrArr = [
+            {key: 'width',val: memo.style.width, fullVal: '100%'},
+            {key: 'height', val: memo.style.height, fullVal: '100%'},
+            {key: 'top', val: memo.style.top, fullVal: '0%'},
+            {key: 'left', val: memo.style.left, fullVal: '0%'},
+            {key: 'z-index', val: 0, fullVal: '999'},
+        ];
+        if(container.style.height !== '100%'){
+            container.style.height = '100%';
+            attrArr.forEach(attr => {
+                memo.setAttribute(`data-${attr.key}`, attr.val);
+                str += `${attr.key}: ${attr.fullVal};`;
+                memo.style = `${str}`;
+            });
+            container.querySelector('#extendBtn').style.display = "none";
+            target.innerHTML = "💻";
+        }else{
+            container.style.height = '88%';
+            attrArr.forEach(attr => {
+                str += `${attr.key}: ${memo.getAttribute(`data-${attr.key}`)};`;
+                memo.style = `${str}`;
+            })
+            container.querySelector('#extendBtn').style.display = "block";
+            target.innerHTML = "🖥️";
+            arr[find].top = memo.style.top;
+            arr[find].left = memo.style.left;
+            localStorage.setItem('memo',JSON.stringify(arr));
+        }
+    };
+    // 배경색
+    if(target.getAttribute('id') === 'colorLable' || target.className === 'checkmaker'){
+        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
+        target.className === 'checkmaker' ? target = target.parentNode : target;
+        memo.querySelector('.memo__text').style.backgroundColor = target.querySelector('input').value;
+        arr[find].backgroundColor = target.querySelector('input').value;
+        localStorage.setItem('memo',JSON.stringify(arr));
+    };
+    // 삭제
+    if(target.className === 'memo__btn--del'){
+        memo.remove();
+        arr = arr.filter(item => item.id !== Number(memo.getAttribute('data-id')));
+        arr.forEach((i,idx) => i.id = idx);
+        localStorage.setItem('memo',JSON.stringify(arr));
+    };
+})
 container.addEventListener("mousedown", (e) => {
     const memo = e.target.closest("#memo");
     let target = e.target;
@@ -152,103 +245,6 @@ container.addEventListener("mousedown", (e) => {
           document.addEventListener('mousemove', mouseMoveHandler);
           document.addEventListener('mouseup', mouseUpHandler, { once: true });
     }
-})
-container.addEventListener("click", (e) => {
-    let target = e.target;
-    const memo = e.target.closest("#memo");
-    // 메모 내용
-    if(target.className === 'memo__text'){
-        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
-        target.addEventListener("change", () => {
-            let flag = arr.length >= container.childElementCount ? true : false;
-            if(flag){
-                arr[find].content = target.value;
-            }else{
-                let data = {
-                'id': arr.length,
-                'content': target.value, 
-                'width': memo.style.width, 
-                'height': memo.style.top, 
-                'top':  memo.style.top, 
-                'left':  memo.style.left, 
-                'fontSize': target.style.fontSize, 
-                'backgroundColor': target.style.background
-                };
-                arr.push(data);
-            }
-            localStorage.setItem('memo',JSON.stringify(arr));
-        });
-    };
-    if(target.className === 'font-btn'){
-        target.nextElementSibling.classList.toggle("active");
-    };
-    // 폰트 사이즈 적용
-    if(target.className === 'drop-item'){
-        const idx = Array.from(document.querySelectorAll('#memo')).indexOf(memo);
-        let beforeSelected = document.getElementsByClassName('selected')[idx];
-        if(beforeSelected && beforeSelected !== target){
-            beforeSelected.classList.remove('selected');
-        }
-        target.classList.toggle("selected");
-        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
-        const fontSize = target.textContent;
-        memo.querySelector('.font-btn').textContent = fontSize;
-        memo.querySelector('.memo__text').style.fontSize = fontSize;
-        arr[find].fontSize = fontSize;
-        localStorage.setItem('memo',JSON.stringify(arr));
-    };
-    // 최대화
-    if(target.className === 'memo__btn--fullscreen'){
-        const attrArr = [
-            {key: 'width',val: memo.style.width, fullVal: '100%'},
-            {key: 'height', val: memo.style.height, fullVal: '100%'},
-            {key: 'top', val: memo.style.top, fullVal: '0%'},
-            {key: 'left', val: memo.style.left, fullVal: '0%'},
-            {key: 'z-index', val: 0, fullVal: '999'},
-            // {key: 'width',val: memo.style.width},
-            // {key: 'height', val: memo.style.height},
-            // {key: 'top', val: memo.style.top},
-            // {key: 'left', val: memo.style.left},
-        ]
-    
-        if(memo.style.width !== '100%'){
-            container.style.height = '100%';
-            let str = '';
-            attrArr.forEach(attr => {
-                memo.setAttribute(`data-${attr.key}`, attr.val);
-                str += `${attr.key}: ${attr.fullVal};`;
-                memo.style = `${str}`;
-            });
-            // memo.style = 'width: 100%;height: 100%;top: 0%;left: 0%;z-index: 999';
-            container.querySelector('#extendBtn').style.display = "none";
-            target.innerHTML = "💻";
-        }else{
-            let str = '';
-            container.style.height = '88%';
-            attrArr.forEach(attr => {
-                str += `${attr.key}: ${memo.getAttribute(`data-${attr.key}`)};`;
-                memo.style = `${str}`;
-            })
-            // memo.style = `width:${memo.getAttribute(`data-width`)};height: ${memo.getAttribute(`data-height`)};top:${memo.getAttribute(`data-top`)};left: ${memo.getAttribute(`data-left`)};z-index:0;`
-            container.querySelector('#extendBtn').style.display = "block";
-            target.innerHTML = "🖥️";
-        }
-    };
-    // 배경색
-    if(target.getAttribute('id') === 'colorLable' || target.className === 'checkmaker'){
-        const find = arr.findIndex(item => item.id === Number(memo.getAttribute('data-id')));
-        target.className === 'checkmaker' ? target = target.parentNode : target;
-        memo.querySelector('.memo__text').style.backgroundColor = target.querySelector('input').value;
-        arr[find].backgroundColor = target.querySelector('input').value;
-        localStorage.setItem('memo',JSON.stringify(arr));
-    };
-    // 삭제
-    if(target.className === 'memo__btn--del'){
-        memo.remove();
-        arr = arr.filter(item => item.id !== Number(memo.getAttribute('data-id')));
-        arr.forEach((i,idx) => i.id = idx);
-        localStorage.setItem('memo',JSON.stringify(arr));
-    };
 })
 container.addEventListener('mouseover', (e) => {
     const target = e.target.className;

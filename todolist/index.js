@@ -11,8 +11,8 @@ const todoEndDate = document.getElementById("todoEndDate");
 const setBtn = document.getElementById("setBtn");
 const modal = document.getElementById("modal");
 const modalWrap = document.getElementById("modalWrap");
-const stars = document.querySelectorAll('.star')
-const showCompleteTodoBtn = document.getElementById('showCompleteTodoBtn')
+const stars = document.querySelectorAll('.star');
+const showCompleteTodoBtn = document.getElementById('showCompleteTodoBtn');
 
 const date = new Date().toISOString().slice(0, 10);
 let setClick = [true, true, true, false, false];
@@ -22,14 +22,14 @@ const setView = (setClick) => {
 };
 setView(setClick);
 
-dateInput.forEach(item => {item.addEventListener("input", (e) => {
+dateInput.forEach(item => {item.addEventListener("input", e => {
     e.target.dataset.placeholder = e.target.value;
-   if(e.target === todoStartDate){
-    todoEndDate.setAttribute("min", e.target.value);
-    if(e.target.value > todoEndDate.dataset.placeholder){
-        todoEndDate.dataset.placeholder = e.target.value;
+    if(e.target === todoStartDate){
+        todoEndDate.setAttribute("min", e.target.value);
+        if(e.target.value > todoEndDate.dataset.placeholder){
+            todoEndDate.dataset.placeholder = e.target.value;
+        }
     }
-   }
 })});
 setBtn.addEventListener("click", () => {
     modal.classList.add("show");
@@ -46,9 +46,9 @@ const handleRating = e => {
     setView(setClick);
 };
 
-stars.forEach((i) => i.addEventListener('click',handleRating));
+stars.forEach(i => i.addEventListener('click',handleRating));
 
-const deleteData = (e) => {
+const deleteData = e => {
     const target = parseInt(e.target.id);
     axios.delete(`http://localhost:3000/todolist/${target}`, {
         data: {id: target,},
@@ -59,9 +59,12 @@ const app = async() => {
     let arr = [];
     const data = await axios.get('http://localhost:3000/todolist');
     arr = data.data.map(item => item);
-   
-    arr.forEach(item => {
-        let content = `
+    
+    const setStr = (item, type) => {
+        let rating = '';
+        showRating(item.rating).forEach((i, index)=> rating += `<span class=${i && 'clicked'} data-index=${index}>★</span>`);
+        let str = `
+        <li>
             <div>
                 <h4>${item.title}</h4>
                 ${item.cont && `<p>${item.cont}</p>`}
@@ -72,50 +75,29 @@ const app = async() => {
                     <input type="checkbox" id="${item.id}" class="complete-btn" name="complete">
                     <button id="${item.id}" type="button" class="update-btn">✏️</button>
                 </div>
-            `
-        let rating = '';
-        showRating(item.rating).forEach((i, index)=> rating += `<span class=${i && 'clicked'} data-index=${index}>★</span>`);
+                <div class="todo__date">${type === 'havetodo' ? `${item.start} ~` : `~ ${item.end}`}
+                    <span class="todo__date--start-hide">${item.start}</span>
+                    <span class="todo__date--end-hide">${item.end}</span>
+                </div>
+                ${item.rating && `<div id="ratingView" class="todo__rating ${type === 'todo' ? '' : 'hide'}" value=${item.rating}>${rating}</div>`}
+            </div>
+        </li>
+        `;
+        return str;
+    }
+   
+    arr.forEach(item => {
         if(item.isComplete === false && item.start === date) {
             document.querySelector('.todo__default.today').classList.add('hide');
-            todoList.insertAdjacentHTML('beforeend', `
-                <li>
-                    ${content}
-                    <div class="todo__date">~ ${item.end}
-                        <span class="todo__date--start-hide">${item.start}</span>
-                        <span class="todo__date--end-hide">${item.end}</span>
-                    </div>
-                    ${item.rating && `<div id="ratingView" class="todo__rating" value=${item.rating}>${rating}</div>`}
-                    </div>
-                </li>
-            `);
+            todoList.insertAdjacentHTML('beforeend', setStr(item, 'todo'));
         }
         if(item.isComplete === false && item.end < date) {
             document.querySelector('.todo__default.undo').classList.add('hide');
-            undoList.insertAdjacentHTML('beforeend', `
-                <li>
-                    ${content}
-                    <div class="todo__date">~ ${item.end}
-                        <span class="todo__date--start-hide">${item.start}</span>
-                        <span class="todo__date--end-hide">${item.end}</span>
-                    </div>
-                    <div id="ratingView" class="todo__rating--hide" value=${item.rating}>${rating}</div>
-                    </div>
-                </li>
-            `);
+            undoList.insertAdjacentHTML('beforeend', setStr(item, 'undo'));
         }
         if(item.isComplete === false && item.start > date){
-            document.querySelector('.todo__default.havetodo').classList.add('none');
-            havetodoList.insertAdjacentHTML('beforeend', `
-                <li>
-                    ${content}
-                    <div class="todo__date">${item.start} ~
-                        <span class="todo__date--start-hide">${item.start}</span>
-                        <span class="todo__date--end-hide">${item.end}</span>
-                    </div>
-                    <div id="ratingView" class="todo__rating--hide" value=${item.rating}>${rating}</div>
-                    </div>
-                </li>
-            `)
+            document.querySelector('.todo__default.havetodo').classList.add('hide');
+            havetodoList.insertAdjacentHTML('beforeend', setStr(item, 'havetodo'))
         }
     });
 

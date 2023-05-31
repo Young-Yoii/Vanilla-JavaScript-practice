@@ -14,20 +14,17 @@ let sec = `00`;
 let timer;
 let toggle = true;
 
-window.onload = () => {
-    init();
-}
 // 윈도우 로드시 동적으로 텍스트 삽입
-function init() {
+window.onload = () => {
     setTimer(hour, min, sec);
 }
 
 // 타이머 display 셋팅
-function setTimer(hour, min, sec){
+const setTimer = (hour, min, sec) =>{
     timeView.innerText = `${String(hour).padStart(2, "0")} : ${String(min).padStart(2, "0")} : ${String(sec).padStart(2, "0")}`; 
 }
 
-function setMode(e) {
+const setMode = e => {
     const name = e.target.name;
 
     if(name === "down") {
@@ -44,7 +41,7 @@ countDownBtn.addEventListener("click", setMode);
 countUpBtn.addEventListener("click", setMode);
 
 // 카운터 셋팅
-function setCount() {
+const setCount = () => {
     modal.classList.add("show");
     if(main.classList.contains("down")){
         modal.innerHTML = `
@@ -103,16 +100,16 @@ function setCount() {
     const $closeBtn = document.querySelector('.close_btn');
     const $submitBtn = document.querySelector('.submit_btn');
 
-    $closeBtn.addEventListener("click", function(){
+    $closeBtn.addEventListener("click", () => {
         modal.classList.remove("show");
     });
-    $submitBtn.addEventListener("click", function(){
+    $submitBtn.addEventListener("click", () => {
         modal.classList.remove("show");
     });
 
     //분 버튼 클릭시 인풋창 값 변경
     $timeBtn.forEach(btn => {
-        btn.addEventListener("click",function(e){
+        btn.addEventListener("click", e => {
             if(e.target.name === "thirty"){
                 $minInput.setAttribute('value', 30);
                 min = 30;
@@ -129,7 +126,7 @@ function setCount() {
 
     //시간값 변경시 시간 display 변경
     $timeInput.forEach(input => {
-        input.addEventListener("input",function(e){
+        input.addEventListener("input", e =>{
             if(e.target.name === "hour"){
                 hour = (e.target.value).padStart(2, "0");
             }else if(e.target.name === "min"){
@@ -142,11 +139,11 @@ function setCount() {
     });
 
     //제목값 변경시 제목 display 변경
-    $titInput.addEventListener("input",function(e){
+    $titInput.addEventListener("input", e => {
         titView.innerHTML = e.target.value;
     });
 };
-function countDown() {
+const countDown = () => {
     if (sec != 0) {
         sec--;
         setTimer(hour, min, sec);
@@ -168,7 +165,7 @@ function countDown() {
         }
     }
 };
-function countUp() {
+const countUp = () => {
     ++sec;
     hour = Math.floor(sec / 3600);
     min = Math.floor((sec - hour * 3600) / 60);
@@ -178,7 +175,7 @@ function countUp() {
 };
 
 // 시간 리셋
-function resetTimer() {
+const resetTimer = () => {
     clearInterval(timer);
     timeView.innerText = `00 : 00 : 00`;
     playBtn.innerHTML = '▶'
@@ -187,7 +184,7 @@ function resetTimer() {
     sec = `00`;
 };
 // 재생, 일시정지 버튼 토글
-function pause() {
+const pause = () => {
     if(main.classList.contains("down")){
         if(hour === '00' && min === '00' && sec === '00') {
             alert("시간을 설정해 주세요");
@@ -218,6 +215,6 @@ settingBtn.addEventListener("click", setCount);
 resetBtn.addEventListener('click', resetTimer);
 playBtn.addEventListener('click', pause);
 // 모달 배경 클릭시 모달 닫힘
-window.addEventListener('click', (e) => {
+window.addEventListener('click', e => {
     e.target === modal ? modal.classList.remove("show") : false;
 })
